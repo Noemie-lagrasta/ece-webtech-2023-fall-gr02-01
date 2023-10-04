@@ -1,46 +1,49 @@
-const url = require('url')
-const qs = require('querystring')
-
 module.exports = {
-    serverHandle: function (req, res) {
+    serverHandle : function (req, res) {
+        const url = require('url')
+        const qs = require('querystring')
         const route = url.parse(req.url)
         const path = route.pathname 
         const params = qs.parse(route.query)
-      
-        res.writeHead(200, {'Content-Type': 'text/plain'})
-      
-        if (path === '/')
-        {
-            res.write('The  path works as folllows: \n\n' +'- If you type "/hello?name=" followed by a random name, you will get a reply "Hello + [name entered]"\n' 
-            + '- If you type "/hello?name=Inchirah", you will get a short intro of myself \n' + "- If you type any other path, a 404 code with a not found message will appear ")
 
-        }
-        else if (path === '/hello' && 'name' in params && params['name'] != 'Inchirah') {
-          res.write('Hello ' + params['name'])
-        } 
-        else if (path === '/hello' && params['name'] == 'Inchirah')
-        {
-            res.write('Hello! I am Inchirah Jabir and I am a student at ECE Paris.')
-        }
-        else if (path === '/about')
-        {
-            const about = require("about");
-            about.readFile("./about.json", (err, jsonString) => {
-            if (err) 
-            {
-                res.write('404\n' + 'Not found')
+        if (path === '/') {
+            res.writeHead(200, {'Content-Type': 'text/html'})
+            res.write('<h1 style="font-size: 24px;">Welcome to the Application!<h1>')
+            res.write('<p style="font-size: 18px;">The application displays the first name present in the URL. Simply enter your first name in the URL after "name" and see what happens!</p>')
+            res.write('<p style="font-size: 18px;"><a href="/hello">Go to /hello?name=</a></p>')
+            res.end()
+        } else if (path === '/hello') {
+            res.writeHead(200, {'Content-Type': 'text/html'})
+
+            if ('name' in params) {
+                const name = params['name']
+                if (name === 'Noemie') {
+                    res.write('<h1 style="font-size: 24px;">Hello!</h1><p style="font-size: 18px;">We are Noemie, Ariane and Inchirah and we are the engineer students who create this application.</p>')
+                } else {
+                    res.write('<h1 style="font-size: 24px;">Hello ' + name + '</h1>')
+                } 
+            } else {
+                res.write('<h1 style="font-size: 24px;">Hello anonymous</h1>')
             }
-            try {
-                console.log(jsonString);
-            } 
-            catch (err) {
-            console.log("Error parsing JSON string:", err);
-            });
+        } else if (path === '/about') {
+            const fs = require('fs')
+            const filePath = __dirname + '/content/about.json'
+
+            if (fs.existsSync(filePath)) {
+                const about = require(filePath)
+
+                res.writeHead(200, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify(about))
+            } else {
+                res.writeHead(404, {'Content-Type': 'text/html'})
+                res.write('<h1 style="font-size: 24px;">404 - Not Found</h1>')
+            }
+            
+        } else {
+            res.writeHead(404, {'Content-Type': 'text/html'})
+            res.write('<h1 style="font-size: 24px;">404 - Not Found</h1>')
         }
-        else {
-          res.write('404\n' + 'Not found')
-        }
-        
+
         res.end()
-      }
-  }
+    }
+}
