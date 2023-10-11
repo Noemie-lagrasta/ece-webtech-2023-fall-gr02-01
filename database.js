@@ -3,7 +3,7 @@ const db = {
     articles: [
 
         {
-            id: '6ec0bd7f-11c0-43da-975e-lkfsdds',
+            id: 1,
             title: 'My article',
             content: 'Content of the article.',
             date: '04/10/2022',
@@ -12,7 +12,7 @@ const db = {
 
 
         {
-            id: '6ec0bd7f-11c0-43da-975e-fhthzsjbzb',
+            id: 2,
             title: 'My article 2',
             content: 'Content of the article 2.',
             date: '07/10/2022',
@@ -21,7 +21,7 @@ const db = {
 
 
         {
-            id: '6ec0bd7f-11c0-43da-975e-aqdsfre',
+            id: 3,
             title: 'My article 3',
             content: 'Content of the article 3.',
             date: '04/11/2022',
