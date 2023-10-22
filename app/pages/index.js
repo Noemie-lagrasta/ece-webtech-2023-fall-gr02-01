@@ -1,16 +1,15 @@
-import React from 'react'
-import Header from 'components/header'
+import Head from 'next/head'
+import Link from 'next/link'
+import Layout from '../components/Layout.js'
 
-const Home = () => {
+export default function Page() {
   return (
-    <div>
-     <Header />
-      <main>
-        <h1>Welcome to Our Blog</h1>
-        <p>This is the home page of our blog.</p>
-      </main>
-    </div>
+    <Layout>
+    <main className="wt-center">
+      <div className="wt-welcome">
+        WELCOME <br/> TO OUR <br/>WEBSITE
+      </div>
+    </main>
+  </Layout>
   )
 }
-
-export default Home

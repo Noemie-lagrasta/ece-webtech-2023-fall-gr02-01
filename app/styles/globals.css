@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.wt-title {
+  @apply text-white text-2xl font-bold text-center;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+
+.wt-title:hover {
+  text-decoration: underline;
+}
+
+.wt-welcome{
+  @apply px-20 py-20 text-white text-9xl font-bold text-center bg-pink-700 border border-pink-700 rounded-md;
+
+}
+
+.wt-center{
+  @apply  flex flex-col justify-center items-center;
+}
+
+.wt-questionnaire{
+  @apply text-black text-2xl text-center;
+}
+.wt-texte{
+  @apply text-center text-black text-2xl;
+}
+
+.wt-articles{
+  @apply bg-pink-700 px-4 py-4 border border-black text-center text-white text-2xl;
+}
+
+.wt-content{
+  @apply border border-black text-center text-black text-xl py-4 px-4;
+}
+
+.wt-presentation{
+  @apply bg-pink-500 border-pink-500 rounded-md px-4 py-4 text-white text-2xl font-bold text-center ;
+}
+
+.wt-quest-general{
+  @apply  border border-pink-700 rounded-md px-4 py-4 text-center items-center;
+}
+
+.wt-questionnaire{
+  @apply border border-pink-700 bg-pink-700 rounded-md px-4 py-4 text-2xl text-center text-white font-bold;
+}
+
+.wt-quest-label{
+  @apply border-pink-700  rounded-md text-2xl text-center text-black font-bold;
+}
+
+.wt-questionnaire2{
+  @apply text-2xl text-center text-black font-bold;
+}
