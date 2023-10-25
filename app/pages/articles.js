@@ -1,25 +1,22 @@
-import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
 import Link from 'next/link'
-import Layout from '../components/Layout.js'
+import Layout from '../components/Layout.js';
+import { db } from './api/articles';
 
-export default function Page() {
-  const [articles, setArticles] = useState([])
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/articles');
-        const data = await response.json();
-        console.log('Data from API:', data);
-        setArticles(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+export async function getStaticProps() {
+  const response = await fetch("http://localhost:3000/api/articles");
+  const articles = await response.json();
+
+  return{
+      props: {
+          articles
       }
-    }
+  }
+}
 
-    fetchData()
-  }, [])
+
+export default function Articles({articles}) {
+
 
   return (
     <Layout>
