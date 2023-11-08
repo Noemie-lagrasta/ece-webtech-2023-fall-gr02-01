@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import Link from 'next/link'
 import Layout from '../components/Layout.js';
-import { db } from './api/articles';
+import { db } from './api/articles.js';
 
 export async function getStaticProps() {
   const response = await fetch("http://localhost:3000/api/articles");
