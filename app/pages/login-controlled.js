@@ -17,7 +17,16 @@ const MyForm = function() {
           <input
             type="text"
             name="my_input"
-            value={data.my_input}
+            value={data.my_value}
+            onChange={e => setData({...data, ...{my_input: e.target.value}})}
+          />
+        </div>
+        <h2>Password</h2>
+        <div>
+          <input
+            type="text"
+            name="my_input"
+            value={data.my_value}
             onChange={e => setData({...data, ...{my_input: e.target.value}})}
           />
         </div>
