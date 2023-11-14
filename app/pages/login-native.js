@@ -1,13 +1,14 @@
-import {useContext} from 'react';
+import React, {useContext} from 'react';
 import Context from '../components/UserContext.js'
 import Layout from '@/components/Layout.js';
+
 
 const LoggedOut = () => {
   const {login} = useContext(Context)
   return (
     <Layout>
         <div>
-        <button onClick={()=>{ login('guest') }}>Login</button>
+        <button onClick={()=>{login() }}>Login</button>
         </div>
     </Layout>
    
@@ -19,7 +20,7 @@ const LoggedIn = () => {
   return (
     <Layout>
         <div>
-            Welcome {user}!
+            Welcome {user.username}!
             <div>
                 <button onClick={()=>{ logout() }}>Logout</button>
             </div>
@@ -32,6 +33,7 @@ const LoggedIn = () => {
 export default () => {
   const {user} = useContext(Context)
   return (
+    
     <div>
       {user ? <LoggedIn /> : <LoggedOut />}
     </div>

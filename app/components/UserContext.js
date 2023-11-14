@@ -1,4 +1,4 @@
-import {createContext, useState} from 'react'
+import {createContext, useState, useEffect} from 'react'
 
 const Context = createContext()
 
@@ -8,11 +8,24 @@ export const ContextProvider = ({
   children
 }) => {
   const [user, setUser] = useState(null)
+  const fetchData = async () => {
+    const response = await fetch('/api/profile')
+    return await response.json()
+  }
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const user = await fetchData()
+      setUser(user)
+    }
+    fetchProfile()
+  }, [])
+
   return (
     <Context.Provider
       value={{
         user: user,
-        login: (user) => {
+        login: async () => {
+          const user = await fetchData()
           setUser(user)
         },
         logout: () => {

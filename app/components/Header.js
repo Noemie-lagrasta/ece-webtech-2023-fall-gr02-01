@@ -2,18 +2,13 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import React, { useEffect, useState } from "react";
+import OutlineUserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon'
+import { useContext } from 'react';
+import UserContext from './UserContext'
 
 
 export default function Header(){
-    const [user, setUser] = useState([])
-    useEffect(() => {
-        async function fetchData() {
-            const response = await fetch('/api/profile')
-            const user = await response.json()
-            setUser(user)
-        }
-        fetchData()
-    }, [])
+  const {user, login, logout} = useContext(UserContext)
     
   return (
     <header className="bg-gradient-to-r from-pink-200 to-pink-700 py-8 px-0">
@@ -29,8 +24,24 @@ export default function Header(){
         <li>
           <Link href="/contacts" className="wt-title">Contact us</Link>
         </li>
-        <li>
-          <Link href="/contacts" className="wt-title">{user.username}</Link>
+        { user && (
+          <li >
+            <Link href="/profile" className="wt-title">
+              {user.username}
+              <OutlineUserCircleIcon />
+            </Link>
+          </li>
+        )}
+        <li >
+          { user ?
+            <button onClick= {() => logout()} className="wt-title">
+              Sign out
+            </button>
+            :
+            <button onClick={() => login()} className="wt-title">
+              Sign in
+            </button>
+          }
         </li>
         
         
