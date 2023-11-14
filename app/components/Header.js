@@ -26,19 +26,21 @@ export default function Header(){
         </li>
         { user && (
           <li >
-            <Link href="/profile" className="wt-title">
+            <Link href="/profile" className="wt-title-2 flex" >
+              <div>
+              <OutlineUserCircleIcon width={20} height={20}/>
               {user.username}
-              <OutlineUserCircleIcon />
+              </div>
             </Link>
           </li>
         )}
         <li >
           { user ?
-            <button onClick= {() => logout()} className="wt-title">
+            <button onClick= {() => logout()} className="wt-title-2">
               Sign out
             </button>
             :
-            <button onClick={() => login()} className="wt-title">
+            <button onClick={() => login()} className="wt-title-2">
               Sign in
             </button>
           }

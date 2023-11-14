@@ -7,8 +7,15 @@
   text-decoration: none;
   transition: text-decoration 0.2s;
 }
-
+.wt-title-2 {
+  @apply text-white text-xl font-bold text-center;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
 .wt-title:hover {
+  text-decoration: underline;
+}
+.wt-title-2:hover {
   text-decoration: underline;
 }
 
