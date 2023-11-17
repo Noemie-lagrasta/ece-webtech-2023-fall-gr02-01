@@ -19,6 +19,18 @@
   text-decoration: underline;
 }
 
+.wt-textemess{
+  @apply text-black text-2xl rounded-md border border-black;
+}
+
+.wt-affichage{
+  @apply text-white text-2xl   bg-pink-700 rounded-md;
+}
+
+.wt-tableau{
+  @apply text-white text-2xl font-bold text-center bg-pink-700 rounded-md;
+}
+
 .wt-welcome{
   @apply px-20 py-20 text-white text-9xl font-bold text-center bg-pink-700 border border-pink-700 rounded-md;
 
