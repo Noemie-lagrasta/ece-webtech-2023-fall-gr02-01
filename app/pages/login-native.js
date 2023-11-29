@@ -30,7 +30,7 @@ const LoggedIn = () => {
   )
 }
 
-export default () => {
+function LoginNative(){
   const {user} = useContext(Context)
   return (
     
@@ -39,3 +39,4 @@ export default () => {
     </div>
   )
 }
+export default LoginNative;
