@@ -3,9 +3,7 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import md from 'markdown-it'
 import Layout from '../../../components/Layout.js'
 
-export default function Contacts({
-  id
-}) {
+export default function Contacts({id}) {
   const [contact, setContact] = useState(null);
   const supabase = useSupabaseClient();
 

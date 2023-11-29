@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import Raact, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Layout from '../../components/Layout.js'

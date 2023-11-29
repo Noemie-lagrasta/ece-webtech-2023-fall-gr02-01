@@ -1,39 +1,40 @@
-import {createContext, useState, useEffect} from 'react'
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import { supabase } from '@/utils/supabase';
 
-const Context = createContext()
+const UserContext = createContext();
 
-export default Context
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [session, setSession] = useState(null);
 
-export const ContextProvider = ({
-  children
-}) => {
-  const [user, setUser] = useState(null)
-  const fetchData = async () => {
-    const response = await fetch('/api/profile')
-    return await response.json()
-  }
   useEffect(() => {
-    const fetchProfile = async () => {
-      const user = await fetchData()
-      setUser(user)
-    }
-    fetchProfile()
-  }, [])
+    const session = supabase.auth.getSession();
 
-  return (
-    <Context.Provider
-      value={{
-        user: user,
-        login: async () => {
-          const user = await fetchData()
-          setUser(user)
-        },
-        logout: () => {
-          setUser(null)
-        }
-      }}
-    >
-      {children}
-    </Context.Provider>
-  )
-}
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setUser(session?.user ?? null);
+    })
+
+
+    return () => subscription.unsubscribe()
+  }, []);
+
+
+  const Hlogout = async () => {
+    await supabase.auth.signOut();
+    setSession(null);
+  };
+
+  const value = {
+    session,
+    user,
+    Hlogout
+  }
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
+
+};
+
+export const useUser = () => useContext(UserContext);
