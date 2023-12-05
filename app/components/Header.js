@@ -9,10 +9,10 @@ export default function Header() {
   const { user, Hlogout } = useUser()
  
   return (
-    <header className="bg-gradient-to-r from-pink-200 to-pink-700 py-8 px-0">
+    <header className="bg-gradient-to-r from-orange-200 to-orange-700 py-8 px-0">
       <nav className="container mx-auto flex items-center justify-between">
         <Link href="/" className="wt-title">
-          WEB TECHNOLOGIES
+          WEB'TRIPS
         </Link>
         <ul className="space-x-10 flex">
           <li>
@@ -32,7 +32,7 @@ export default function Header() {
           </li>
           {user && (
             <li>
-              <Link href="/profile" className="wt-title flex">
+              <Link href="/admin/profile" className="wt-title flex">
                 <div className='flex itemps-center'>
                   <OutlineUserCircleIcon width={30} height={30}/>
                   <span className="ml-2">{user.email}</span>                  
