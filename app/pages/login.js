@@ -13,24 +13,20 @@ export default function Login() {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-
-      
+      setSession(session)  
     })
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)   
-    
     })
-
-       
+      
 
     return () => subscription.unsubscribe()
   }, [])
 
-  const hanfleLogout = async () => {
+  const handleLogout = async () => {
     await supabase.auth.signOut();
     setSession(null);
 };
