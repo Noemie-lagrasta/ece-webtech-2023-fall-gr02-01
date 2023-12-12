@@ -1,12 +1,23 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import React, { useEffect, useState, useContext } from 'react';
-import OutlineUserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon';
+import { UserCircleIcon } from '@heroicons/react/solid';
 import { useUser } from './UserContext';
+import { MoonIcon } from '@heroicons/react/outline';
+import { SunIcon } from '@heroicons/react/solid';
+import OutlineUserCircleIcon from '@heroicons/react/outline/UserCircleIcon';
+
+
 
 
 export default function Header() {
-  const { user, Hlogout } = useUser()
+  const { user, Hlogout } = useUser();
+  const [darkMode, setDarkMode] = useState(false);
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+    // Vous pouvez également stocker le choix de l'utilisateur dans un cookie/localStorage
+  };
  
   return (
     <header className="bg-gradient-to-r from-orange-200 to-orange-700 py-8 px-0">
@@ -16,8 +27,8 @@ export default function Header() {
         </Link>
         <ul className="space-x-10 flex">
           <li>
-            <Link href="/articles" className="wt-title">
-              Articles
+            <Link href="/travels" className="wt-title">
+              Posts
             </Link>
           </li>
           <li>
@@ -52,7 +63,7 @@ export default function Header() {
 
                   
           </li>
-
+     
         </ul>
       </nav>
     </header>

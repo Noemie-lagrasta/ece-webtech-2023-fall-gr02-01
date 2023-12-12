@@ -1,6 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.dark {
+  background-color: #1a202c;
+  color: #ffffff;
+}
+
+.light {
+  background-color: orange;
+  color: #ffffff;
+}
 
 @layer components {
   .bg-orange {

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import md from 'markdown-it';
 import Layout from '../../components/Layout.js';
-import OutlineUserCircleIcon from '@heroicons/react/24/outline/UserCircleIcon';
-import { ChevronLeftIcon } from '@heroicons/react/20/solid';
+import OutlineUserCircleIcon from '@heroicons/react/outline/UserCircleIcon';
+import { ChevronLeftIcon } from '@heroicons/react/solid';
 import Link from 'next/link.js';
 import { useUser } from '/components/UserContext.js';
 import StarRating from '/pages/RatingSys';
@@ -25,7 +25,7 @@ export default function Travels({ id }) {
       try {
         let { data, error, status } = await supabase
           .from('travels')
-          .select('id, TravelerName, TravelDest, TravelDays, TravelStory, Travelemail')
+          .select('id, TravelerName, TravelDest, TravelDays, TravelStory, Travelemail, TravelTools')
           .eq('id', id)
           .single();
 
@@ -136,6 +136,15 @@ export default function Travels({ id }) {
                       {travel.TravelerName}
                     </span>
                   </div>
+                  <br /><br />
+                  <div>
+                    {travel.TravelDays}
+                    <br /><br />
+                  </div>
+                  <div>
+                    by  {travel.TravelTools}
+                  </div>
+
                   <br />
                 </td>
                 <td className='w-1/3 items-center'>
@@ -150,21 +159,21 @@ export default function Travels({ id }) {
                     <h1> Thanks for your review</h1>
                   ) : (
                     <>
-                    <div className='wt-rate'>This post is rated: {averageRating.toFixed(2)}/5</div>
+                      <div className='wt-rate'>This post is rated: {averageRating.toFixed(2)}/5</div>
 
-                    {user ? (
-                      <>
-                        <StarRating onRate={handleRate} />
-                        <textarea name='commentaire' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
-                        <button onClick={Validate} className={`flex ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={submitting}>
-                          SUBMIT YOUR REVIEW
-                        </button>
-                      </>
-                    ) : (
-                      <div className='flex'>
-                        <Link href='/login'>Log in </Link> to leave a review on this post
-                      </div>
-                    )}
+                      {user ? (
+                        <>
+                          <StarRating onRate={handleRate} />
+                          <textarea name='commentaire' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
+                          <button onClick={Validate} className={`flex ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={submitting}>
+                            SUBMIT YOUR REVIEW
+                          </button>
+                        </>
+                      ) : (
+                        <div className='flex'>
+                          <Link href='/login'>Log in </Link> to leave a review on this post
+                        </div>
+                      )}
                     </>
                   )}
                 </td>

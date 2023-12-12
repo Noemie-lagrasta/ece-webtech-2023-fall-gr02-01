@@ -65,6 +65,12 @@ export default function Page() {
         </div>
         <div>
           <label>
+            <span>How did you travel ?</span>
+            <input type="text" name="TravelTools" />
+          </label>
+        </div>
+        <div>
+          <label>
             <span>Tell us about your trip</span>
             <textarea name="TravelStory" />
           </label>
