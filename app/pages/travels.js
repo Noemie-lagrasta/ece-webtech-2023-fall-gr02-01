@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronRightIcon } from '@heroicons/react/solid';
+import { ChevronRightIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
 import { FilterIcon } from '@heroicons/react/solid';
 import Layout from '/components/Layout.js';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { supabase } from '@/utils/supabase';
 import FilterModal from '@/pages/filters';
-/// ... (existing imports)
+import { useUser } from '/components/UserContext.js';
+
 
 export default function Travels() {
   const [travels, setTravels] = useState([]);
@@ -14,12 +14,13 @@ export default function Travels() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [filtersCount, setFilterCountry] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({ filtersCount: [] });
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchTravels = async () => {
       let { data, error } = await supabase
         .from('travels')
-        .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
+        .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, Travelemail`);
 
       if (searchTerm.trim() === '') {
         setTravels(data || []);
@@ -89,9 +90,10 @@ export default function Travels() {
 
         setTravels(searchData && searchData.length > 0 ? searchData : data || []);
       }
+    }
+    fetchTravels();
+    ;
   }
-  fetchTravels();
-  ;}
 
 
   const openModal = () => {
@@ -154,7 +156,10 @@ export default function Travels() {
       )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {travels.map((travel) => (
-          <div key={travel.id} className="bg-white overflow-hidden shadow rounded-lg">
+          <div
+            key={travel.id}
+            className={`bg-white overflow-hidden shadow rounded-lg`}
+          >
             <div className="p-4">
               <h3 className="text-4xl font-bold mb-2 ">{travel.TravelDest}</h3>
               <p className="text-slate-500 mb-2">{travel.TravelerName}</p>
@@ -162,13 +167,19 @@ export default function Travels() {
               <p className='text-slate-500'>by {travel.TravelTools}</p>
               <p className="text-slate-500 mt-2">{travel.TravelStory.slice(0, 100)} ....</p>
             </div>
-            <div className="p-4 flex items-center justify-center">
+            <div className="p-4 flex justify-between items-center">
               <Link
                 href={`/travels/${travel.id}`}
                 className="w-5 h-5 block bg-slate-200 hover:bg-blue-500 hover:text-white rounded-full"
               >
-                <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+                <ChevronRightIcon className="h-5 w-5 " aria-hidden="true" />
               </Link>
+              {user && user.email === travel.Travelemail && (
+                <div className="flex items-center">
+                  <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
+                  <TrashIcon className="h-5 w-5 ml-2" aria-hidden="true" />
+                </div>
+              )}
             </div>
           </div>
         ))}
