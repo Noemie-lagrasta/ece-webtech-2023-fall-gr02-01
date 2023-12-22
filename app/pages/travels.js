@@ -6,6 +6,7 @@ import Layout from '/components/Layout.js';
 import { supabase } from '@/utils/supabase';
 import FilterModal from '@/pages/filters';
 import { useUser } from '/components/UserContext.js';
+import Modal from 'react-modal';
 
 
 export default function Travels() {
@@ -15,33 +16,62 @@ export default function Travels() {
   const [filtersCount, setFilterCountry] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({ filtersCount: [] });
   const { user } = useUser();
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [travelToDelete, setTravelToDelete] = useState(null);
+  const fetchTravels = async () => {
+    let { data, error } = await supabase
+      .from('travels')
+      .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, Travelemail`);
 
-  useEffect(() => {
-    const fetchTravels = async () => {
+    if (searchTerm.trim() === '') {
+      setTravels(data || []);
+    } else {
+      let { data: searchData, error } = await supabase
+        .from('travels')
+        .select(`id, TravelerName, TravelDest, TravelDays, TravelStory,TravelTools`)
+        .or(`TravelDest.ilike.%${searchTerm}%, TravelerName.ilike.%${searchTerm}%, TravelTools.ilike.%${searchTerm}%`);
+
+      if (error) {
+        console.log('Error: ', error);
+      }
+
+      setTravels(searchData && searchData.length > 0 ? searchData : data || []);
+    }
+  };
+
+
+  const handleDeleteClick = (travel) => {
+    setTravelToDelete(travel);
+    setDeleteModalOpen(true);
+  };
+  const handleDeleteConfirm = async () => {
+    setDeleteModalOpen(false);
+
+    console.log('a delete:', travelToDelete.id)
+  
+    if (travelToDelete) {
       let { data, error } = await supabase
         .from('travels')
-        .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, Travelemail`);
-
-      if (searchTerm.trim() === '') {
-        setTravels(data || []);
-      } else {
-        let { data: searchData, error } = await supabase
-          .from('travels')
-          .select(`id, TravelerName, TravelDest, TravelDays, TravelStory,TravelTools`)
-          .or(`TravelDest.ilike.%${searchTerm}%, TravelerName.ilike.%${searchTerm}%, TravelTools.ilike.%${searchTerm}%`);
-
-        if (error) {
-          console.log('Error: ', error);
-        }
-
-        setTravels(searchData && searchData.length > 0 ? searchData : data || []);
+        .delete()
+        .eq('id', travelToDelete.id); // Use eq() to match the 'id' field
+  
+      if (error) {
+        console.error('Error deleting travel:', error);
       }
-    };
+    }
 
     fetchTravels();
+  };
+  
+  
+  
+  useEffect(() => {
+    
+    fetchTravels(); // Now fetchTravels is defined before being called
   }, [searchTerm]);
 
   useEffect(() => {
+    Modal.setAppElement('#__next')
     const fetchFilters = async () => {
       try {
         const { data: countData, error: countError } = await supabase
@@ -70,7 +100,7 @@ export default function Travels() {
   };
   const clearFilters = () => {
     setSelectedFilters({ filtersCount: [] });
-    setModalOpen(false); 
+    setModalOpen(false);
     const fetchTravels = async () => {
       let { data, error } = await supabase
         .from('travels')
@@ -103,23 +133,23 @@ export default function Travels() {
   const fetchFilteredTravels = async (filters) => {
     try {
 
-      if (filters!=null){
-      const { data, error } = await supabase
-        .from('travels')
-        .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, TravelCountry`)
-        .in('TravelCountry', filters);
+      if (filters != null) {
+        const { data, error } = await supabase
+          .from('travels')
+          .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, TravelCountry`)
+          .in('TravelCountry', filters);
 
-      if (error) {
-        console.error('Error fetching filtered travels:', error);
-        return;
+        if (error) {
+          console.error('Error fetching filtered travels:', error);
+          return;
+        }
       }
-    }
-    else{
-      let { data, error } = await supabase
-      .from('travels')
-      .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
+      else {
+        let { data, error } = await supabase
+          .from('travels')
+          .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
 
-    }
+      }
       setTravels(data || []);
     } catch (error) {
       console.error('Error handling filters change:', error);
@@ -184,8 +214,40 @@ export default function Travels() {
               </Link>
               {user && user.email === travel.Travelemail && (
                 <div className="flex items-center">
-                  <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
-                  <TrashIcon className="h-5 w-5 ml-2" aria-hidden="true" />
+                  <Link
+                    href={`/admin/posts/${travel.id}`}
+                    className="w-5 h-5 block bg-slate-200 hover:bg-blue-500 hover:text-white rounded-full"
+                  >
+                    <PencilAltIcon className="h-5 w-5" aria-hidden="true" /></Link>
+                  <button onClick={() => handleDeleteClick(travel)}>
+                    <TrashIcon className="h-5 w-5 ml-2" aria-hidden="true" />
+                  </button>
+                  <Modal
+                    isOpen={isDeleteModalOpen}
+                    onRequestClose={() => setDeleteModalOpen(false)}
+                    contentLabel="Delete Confirmation"
+                    className="delete-modal" // Apply the class here
+                  >
+                    <div className="border border-gray-300 p-4 rounded max-w-md mx-auto"> {/* Apply Tailwind classes here */}
+                      <p className="mb-4">Are you sure you want to delete this travel?</p>
+                      <div className="flex justify-end">
+                        <button
+                          onClick={handleDeleteConfirm}
+                          className="bg-red-500 text-white px-4 py-2 mr-2 rounded"
+                        >
+                          Yes
+                        </button>
+                        <button
+                          onClick={() => setDeleteModalOpen(false)}
+                          className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                        >
+                          No
+                        </button>
+                      </div>
+                    </div>
+                  </Modal>
+
+
                 </div>
               )}
             </div>
