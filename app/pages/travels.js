@@ -70,7 +70,7 @@ export default function Travels() {
   };
   const clearFilters = () => {
     setSelectedFilters({ filtersCount: [] });
-    setModalOpen(false); // Close the modal after clearing filters
+    setModalOpen(false); 
     const fetchTravels = async () => {
       let { data, error } = await supabase
         .from('travels')
@@ -102,6 +102,8 @@ export default function Travels() {
 
   const fetchFilteredTravels = async (filters) => {
     try {
+
+      if (filters!=null){
       const { data, error } = await supabase
         .from('travels')
         .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, TravelCountry`)
@@ -111,7 +113,13 @@ export default function Travels() {
         console.error('Error fetching filtered travels:', error);
         return;
       }
+    }
+    else{
+      let { data, error } = await supabase
+      .from('travels')
+      .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
 
+    }
       setTravels(data || []);
     } catch (error) {
       console.error('Error handling filters change:', error);
