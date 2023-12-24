@@ -18,9 +18,7 @@ export default function Articles({ articles }) {
           <br/>   <br/>   <br/>
 
           <div className='wt-choice '>
-
             <Link href='/admin/ADDtravels'>Write a new post</Link>
-
           </div>
 
           <br/>   <br/>   <br/>
