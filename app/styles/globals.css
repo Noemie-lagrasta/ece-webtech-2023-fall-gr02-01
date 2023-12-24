@@ -1,6 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+.dark {
+  background-color: #1a202c;
+  color: #ffffff;
+}
+
+.light {
+  background-color: orange;
+  color: #ffffff;
+}
+
+@layer components {
+  .bg-orange {
+    background-color: orange;
+  }
+  .border-orange{
+    border-color: orange;
+  }
+
+}
+
+.wt-thanks{
+  @apply text-amber-500 text-6xl font-bold text-center;
+}
 
 @layer components {
   .bg-orange {
@@ -14,6 +37,11 @@
 
 .wt-title {
   @apply text-white text-2xl font-bold text-center;
+  text-decoration: none;
+  transition: text-decoration 0.2s;
+}
+.wt-titleadmin {
+  @apply text-amber-500 text-6xl font-bold text-center;
   text-decoration: none;
   transition: text-decoration 0.2s;
 }
@@ -33,7 +61,26 @@
   transform: scale(1.5);
 }
 
+
+.wt-title-trip {
+  @apply text-black text-4xl font-bold ;
+
+}
+
+.wt-choice{
+  @apply px-5 py-5 text-5xl text-center text-white font-bold bg-orange-500 border border-orange-500 rounded-md ;
+  transition: text-decoration 0.2s;
+
+}
+.wt-choice:hover{
+  transform: scale(1.5);
+}
+
 .wt-title:hover {
+  text-decoration: underline;
+}
+
+.wt-titleadmin:hover {
   text-decoration: underline;
 }
 .wt-title-2:hover {
