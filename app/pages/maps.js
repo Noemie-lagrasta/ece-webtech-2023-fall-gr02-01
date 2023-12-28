@@ -200,22 +200,22 @@ const MapComponent = () => {
                     <div className="p-4 flex justify-between items-center">
                       <Link
                         href={`/travels/${travel.id}`}
-                        className={`w-5 h-5 rounded-full block ${darkMode ? 'bg-slate-200 hover:bg-blue-500' : 'bg-slate-200 hover:bg-orange-500'} `}
-                      >
+                        className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}
+                        >
                         <ChevronRightIcon className="h-5 w-5 " aria-hidden="true" />
                       </Link>
                       {user && user.email === travel.Travelemail && (
                         <div className="flex items-center">
                           <Link
                             href={`/admin/posts/${travel.id}`}
-                            className={`w-5 h-5 rounded-full block ${darkMode ? 'bg-slate-200 hover:bg-blue-500' : 'bg-slate-200 hover:bg-orange-500'} `}
-                          >
+                            className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}
+                            >
                             <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
                           </Link>
                           <button
                             onClick={() => handleDeleteClick(travel)}
-                            className={`w-5 h-5 rounded-full block ${darkMode ? 'bg-slate-200 hover:bg-blue-500' : 'bg-slate-200 hover:bg-orange-500'} `}
-                          >
+                            className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}
+                            >
                             <TrashIcon className="h-5 w-5" aria-hidden="true" />
                           </button>
                           <Modal

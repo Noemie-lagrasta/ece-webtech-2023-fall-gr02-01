@@ -14,7 +14,7 @@
   color: #859ece;
 }
 .light-writting{
-  color: black;
+  color: #ffffff;
 }
 .dark {
   background: linear-gradient(to bottom, #0b0124, #859ece);
@@ -30,16 +30,16 @@
   color: #ffffff;
 }
 .light {
-  background: #ffffff;
+  background: linear-gradient(to bottom, #f17609, #e9bf98);
   color: #ffffff; /* Adjust to your light mode text color */
 }
 
 .light-header {
-  background: linear-gradient(to left, #f17609, #e9bf98);
+  background-color: #f17609;
   color: #ffffff; /* Adjust to your light mode text color */
 }
 .light-footer {
-  background: linear-gradient(to right, #f17609, #e9bf98);
+  background-color: #e9bf98;
   color: #ffffff; /* Adjust to your light mode text color */
 }
 
