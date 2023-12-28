@@ -1,5 +1,7 @@
+// Importez les composants nécessaires
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ChevronRightIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
 import { FilterIcon } from '@heroicons/react/solid';
 import Layout from '/components/Layout.js';
@@ -8,19 +10,21 @@ import FilterModal from '@/pages/filters';
 import { useUser } from '/components/UserContext.js';
 import Modal from 'react-modal';
 
-
-export default function Travels() {
+export default function TravelsPage() {
   const [travels, setTravels] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setModalOpen] = useState(false);
   const [filtersCount, setFilterCountry] = useState([]);
   const [selectedFilters, setSelectedFilters] = useState({ filtersCount: [] });
-  const { user } = useUser();
+  const { user, darkMode, gravatar } = useUser();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [travelToDelete, setTravelToDelete] = useState(null);
-  const fetchTravels = async () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [articlesPerPage] = useState(6);
 
-    
+  const router = useRouter();
+
+  const fetchTravels = async () => {
     let { data, error } = await supabase
       .from('travels')
       .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, Travelemail`);
@@ -41,22 +45,22 @@ export default function Travels() {
     }
   };
 
-
   const handleDeleteClick = (travel) => {
     setTravelToDelete(travel);
     setDeleteModalOpen(true);
   };
+
   const handleDeleteConfirm = async () => {
     setDeleteModalOpen(false);
 
-    console.log('a delete:', travelToDelete.id)
-  
+    console.log('a delete:', travelToDelete.id);
+
     if (travelToDelete) {
       let { data, error } = await supabase
         .from('travels')
         .delete()
-        .eq('id', travelToDelete.id); // Use eq() to match the 'id' field
-  
+        .eq('id', travelToDelete.id);
+
       if (error) {
         console.error('Error deleting travel:', error);
       }
@@ -64,16 +68,13 @@ export default function Travels() {
 
     fetchTravels();
   };
-  
-  
-  
+
   useEffect(() => {
-    
-    fetchTravels(); // Now fetchTravels is defined before being called
+    fetchTravels();
   }, [searchTerm]);
 
   useEffect(() => {
-    Modal.setAppElement('#__next')
+    Modal.setAppElement('#__next');
     const fetchFilters = async () => {
       try {
         const { data: countData, error: countError } = await supabase
@@ -86,7 +87,6 @@ export default function Travels() {
         }
 
         setFilterCountry([...new Set(countData.map((filter) => filter.TravelCountry))]);
-
       } catch (error) {
         console.error('Error fetching filter names:', error);
       }
@@ -100,33 +100,12 @@ export default function Travels() {
       return { ...prevFilters, filtersCount: [...prevFilters.filtersCount, selectedFilter] };
     });
   };
+
   const clearFilters = () => {
     setSelectedFilters({ filtersCount: [] });
     setModalOpen(false);
-    const fetchTravels = async () => {
-      let { data, error } = await supabase
-        .from('travels')
-        .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
-
-      if (searchTerm.trim() === '') {
-        setTravels(data || []);
-      } else {
-        let { data: searchData, error } = await supabase
-          .from('travels')
-          .select(`id, TravelerName, TravelDest, TravelDays, TravelStory,TravelTools`)
-          .or(`TravelDest.ilike.%${searchTerm}%, TravelerName.ilike.%${searchTerm}%, TravelTools.ilike.%${searchTerm}%`);
-
-        if (error) {
-          console.log('Error: ', error);
-        }
-
-        setTravels(searchData && searchData.length > 0 ? searchData : data || []);
-      }
-    }
     fetchTravels();
-    ;
   };
-
 
   const openModal = () => {
     setModalOpen(true);
@@ -134,43 +113,49 @@ export default function Travels() {
 
   const fetchFilteredTravels = async (filters) => {
     try {
-      let data; // Declare 'data' variable here
-  
-      if (filters != null) {
+      let data;
+
+      if (filters != null && filters.length > 0) {
         const { data: filteredData, error } = await supabase
           .from('travels')
           .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, TravelCountry`)
           .in('TravelCountry', filters);
-  
+
         if (error) {
           console.error('Error fetching filtered travels:', error);
           return;
         }
-  
-        data = filteredData; // Assign 'filteredData' to 'data'
+
+        data = filteredData;
       } else {
         let { data: allData, error } = await supabase
           .from('travels')
           .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
-  
-        data = allData; // Assign 'allData' to 'data'
+
+        data = allData;
       }
-  
+
       setTravels(data || []);
     } catch (error) {
       console.error('Error handling filters change:', error);
     }
   };
-  
 
   const closeModal = async () => {
     setModalOpen(false);
     fetchFilteredTravels(selectedFilters.filtersCount);
   };
 
+  const indexOfLastArticle = currentPage * articlesPerPage;
+  const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
+  const currentArticles = travels.slice(indexOfFirstArticle, indexOfLastArticle);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
-    <Layout title="All travels" description="Generated by create next app">
-      <div className="mb-4">
+    <Layout >
+      <div className='mb-4'>
+      <div className="mb-4 mt-12">
         <input
           type="text"
           placeholder="a city, a web'tripper, way to travel ..."
@@ -180,8 +165,8 @@ export default function Travels() {
         />
       </div>
 
-      <div className="flex space-x-4">
-        <button className="flex items-center rounded-md border border-grey-300" onClick={openModal}>
+      <div className={`flex space-x-4 ${darkMode ? 'dark-writting' : 'light-writting'}`}>
+        <button className="flex items-center rounded-md border border-grey-300 " onClick={openModal}>
           <FilterIcon className="h-5 w-5" aria-hidden="true" />
           FILTER POSTS
         </button>
@@ -200,34 +185,38 @@ export default function Travels() {
         />
       )}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {travels.map((travel) => (
+        {currentArticles.map((travel) => (
           <div
             key={travel.id}
             className={`bg-white overflow-hidden shadow rounded-lg`}
           >
             <div className="p-4">
-              <h3 className="text-4xl font-bold mb-2 ">{travel.TravelDest}</h3>
+              <h3 className="text-4xl font-bold mb-2 text-black">{travel.TravelDest}</h3>
               <p className="text-slate-500 mb-2">{travel.TravelerName}</p>
               <p className="text-slate-500">{travel.TravelDays} </p>
               <p className='text-slate-500'>by {travel.TravelTools}</p>
-              <p className="text-slate-500 mt-2">{travel.TravelStory.slice(0, 100)} ....</p>
+              <p className="text-slate-500 mt-2" dangerouslySetInnerHTML={{ __html: travel.TravelStory.slice(0, 100) + ' ....' }} />
             </div>
             <div className="p-4 flex justify-between items-center">
               <Link
-                href={`/travels/${travel.id}`}
-                className="w-5 h-5 block bg-slate-200 hover:bg-blue-500 hover:text-white rounded-full"
-              >
+                href={user && user.email === travel.Travelemail ? `/admin/posts/${travel.id}` : `/travels/${travel.id}`}
+                passHref
+                className="w-5 h-5 block bg-slate-200 hover:bg-orange-500 hover:text-white rounded-full">
                 <ChevronRightIcon className="h-5 w-5 " aria-hidden="true" />
               </Link>
               {user && user.email === travel.Travelemail && (
                 <div className="flex items-center">
                   <Link
-                    href={`/admin/posts/${travel.id}`}
-                    className="w-5 h-5 block bg-slate-200 hover:bg-blue-500 hover:text-white rounded-full"
+                    href={`/edit/${travel.id}`}
+                    passHref
+                    className="w-5 h-5 block bg-slate-200 hover:bg-orange-500 hover:text-white rounded-full">
+                    <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
+                  </Link>
+                  <button
+                    onClick={() => handleDeleteClick(travel)}
+                    className={`w-5 h-5 rounded-full block ${darkMode ? 'bg-slate-200 hover:bg-blue-500' : 'bg-slate-200 hover:bg-orange-500'} `}
                   >
-                    <PencilAltIcon className="h-5 w-5" aria-hidden="true" /></Link>
-                  <button onClick={() => handleDeleteClick(travel)}>
-                    <TrashIcon className="h-5 w-5 ml-2" aria-hidden="true" />
+                    <TrashIcon className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <Modal
                     isOpen={isDeleteModalOpen}
@@ -253,13 +242,26 @@ export default function Travels() {
                       </div>
                     </div>
                   </Modal>
-
-
                 </div>
               )}
             </div>
           </div>
         ))}
+      </div>
+      {travels.length > articlesPerPage && (
+        <div className="flex justify-center mt-4">
+          {Array.from({ length: Math.ceil(travels.length / articlesPerPage) }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => paginate(index + 1)}
+              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? `bg-${darkMode ? 'blue' : 'orange'}-500 text-white` : 'bg-gray-300 text-gray-700'}`}
+            
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
+      )}
       </div>
     </Layout>
   );

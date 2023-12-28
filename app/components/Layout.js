@@ -1,17 +1,17 @@
+import Header from '../components/Header.js';
+import Footer from '../components/Footer.js';
+import { useUser } from './UserContext.js';
 
-import Header from '../components/Header.js'
-import Footer from '../components/Footer.js'
+export default function Layout({ children }) {
+  const { darkMode } = useUser();
 
-
-
-export default function Layout({children}){
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-1 px-20 py-10 bg-white" >
+      <main className={`flex-1 ${darkMode ? 'dark' : 'light'}`}>
         {children}
       </main>
       <Footer />
     </div>
-  )
+  );
 }

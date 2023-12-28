@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Layout from '../components/Layout.js'
+import { useUser } from '../components/UserContext.js'
 
 export default function Page() {
+  const { darkMode } = useUser();
   return (
     <Layout>
       <Head>
@@ -10,24 +12,23 @@ export default function Page() {
         <meta name="description" content="Don't be shy, drop us an email" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="wt-center">
-      <div className="wt-welcome">
-        ABOUT US
-      </div>
+      <main >
+        <div className={`mt-32 mb-12 w-full flex items-center justify-center`}>
+
+          <div className={`px-20 py-20 text-9xl font-bold text-center ${darkMode ? 'dark-components' : 'light-components'} border rounded-md`}>
+            ABOUT US
+          </div>
+        </div>
+        <div className="wt-texte">
+          We are 2 engineering students at ECE Paris.<br /> And this is our project in Web Technologies<br /> You can navigate on it.
+        </div>
+        <div className="flex items-center justify-between px-40 mb-6">
+          <div className={`px-4 py-4 text-2xl font-bold text-center ${darkMode ? 'dark-components' : 'light-components'} border rounded-md`}>
+            ARIANE AUBRUN<br /> ______________<br /><br /> Co-president</div>
+          <div className={`px-4 py-4 text-2xl font-bold text-center ${darkMode ? 'dark-components' : 'light-components'} border rounded-md`}>
+            NOEMIE LAGRASTA<br />______________<br /> <br /> Co-president</div>
+        </div>
       </main>
-      <br/><br/>
-
-      <div className="wt-texte">
-        We are 2 engineering students at ECE Paris.<br/> And this is one of our homework in Web Technologies, it will evoluate gradually. <br/> For the moment, you can navigate on it.
-      </div>
-      <div className="flex items-center justify-between px-40">
-        <div className='wt-presentation'>ARIANE AUBRUN<br/> ______________<br/><br/> Co-president</div>
-        <div className='wt-presentation'>NOEMIE LAGRASTA<br/>______________<br/> <br/> Co-president</div>
-      </div>
-
-        
-
-
     </Layout>
   )
 }

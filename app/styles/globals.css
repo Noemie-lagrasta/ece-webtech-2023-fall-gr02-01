@@ -1,14 +1,53 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dark-header {
+  background: #0b0124;
+  color: #859ece;
+}
+.dark-footer {
+  background:  #859ece;
+  color: #0b0124;
+}
+.dark-writting{
+  color: #859ece;
+}
+.light-writting{
+  color: black;
+}
 .dark {
-  background-color: #1a202c;
+  background: linear-gradient(to bottom, #0b0124, #859ece);
+  color: #2d3748;
+}
+.dark-components{
+  background-color: #2a0783;
+  color: #859ece;
+  border-color: #2a0783;
+}
+.light-components{
+  background-color: #f17609;
   color: #ffffff;
 }
-
 .light {
-  background-color: orange;
-  color: #ffffff;
+  background: #ffffff;
+  color: #ffffff; /* Adjust to your light mode text color */
+}
+
+.light-header {
+  background: linear-gradient(to left, #f17609, #e9bf98);
+  color: #ffffff; /* Adjust to your light mode text color */
+}
+.light-footer {
+  background: linear-gradient(to right, #f17609, #e9bf98);
+  color: #ffffff; /* Adjust to your light mode text color */
+}
+
+.dark, .light {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+.light, .dark {
+  transition: background-color 0.5s ease, color 0.5s ease;
 }
 
 @layer components {
@@ -21,10 +60,6 @@
 
 }
 
-.wt-thanks{
-  @apply text-amber-500 text-6xl font-bold text-center;
-}
-
 @layer components {
   .bg-orange {
     background-color: orange;
@@ -35,11 +70,6 @@
 
 }
 
-.wt-title {
-  @apply text-white text-2xl font-bold text-center;
-  text-decoration: none;
-  transition: text-decoration 0.2s;
-}
 .wt-titleadmin {
   @apply text-amber-500 text-6xl font-bold text-center;
   text-decoration: none;
@@ -52,14 +82,7 @@
 
 }
 
-.wt-choice{
-  @apply px-5 py-5 text-5xl text-center text-white font-bold bg-orange-500 border border-orange-500 rounded-md ;
-  transition: text-decoration 0.2s;
 
-}
-.wt-choice:hover{
-  transform: scale(1.5);
-}
 
 
 .wt-title-trip {
@@ -103,16 +126,7 @@
   @apply text-white text-2xl font-bold text-center bg-orange rounded-md;
 }
 
-.wt-welcome{
-  @apply px-20 py-20 text-white text-9xl font-bold text-center bg-orange-500 border border-orange-500  rounded-md;
 
-}
-.wt-option{
-  @apply px-10 py-10 text-black text-4xl font-bold text-center  border border-black rounded-md ;
-
-}
-.wt-option:hover{
-  transform: scale(1.05); }
 .wt-center{
   @apply  flex flex-col justify-center items-center;
 }
@@ -121,7 +135,7 @@
   @apply text-black text-2xl text-center;
 }
 .wt-texte{
-  @apply text-center text-black text-2xl;
+  @apply text-center text-black  text-2xl;
 }
 
 .wt-rate{
@@ -137,7 +151,7 @@
 }
 
 .wt-presentation{
-  @apply bg-pink-500 border-pink-500 rounded-md px-4 py-4 text-white text-2xl font-bold text-center ;
+  @apply rounded-md px-4 py-4  text-2xl font-bold text-center ;
 }
 
 .wt-quest-general{

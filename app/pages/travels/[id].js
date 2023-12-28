@@ -1,54 +1,61 @@
 import { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import md from 'markdown-it';
 import Layout from '../../components/Layout.js';
-
 import OutlineUserCircleIcon from '@heroicons/react/outline/UserCircleIcon';
-import { ChevronLeftIcon } from '@heroicons/react/solid';
+import { ChevronLeftIcon, ChatAltIcon } from '@heroicons/react/solid';
 import Link from 'next/link.js';
-import { useUser } from '/components/UserContext.js';
+import { useUser, getGravatarUrl } from '/components/UserContext.js';
 import StarRating from '/pages/RatingSys';
 
 export default function Travels({ id }) {
-  const [travel, setTravels] = useState(null);
+  const [travel, setTravel] = useState(null);
   const [loading, setLoading] = useState(true);
   const [averageRating, setAverageRating] = useState(0);
   const supabase = useSupabaseClient();
-  const { user } = useUser();
+  const { user, darkMode } = useUser();
   const [value, setRate] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [commentaire, setCommentaire] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [isRevOpen, setRevOpen] = useState(false);
+  const [modification, setModification] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [commentsPerPage] = useState(2);
 
-  useEffect(() => {
-    // ici, nous récupérons toutes les informations du poste choisi
-    const fetchData = async () => {
-      try {
-        let { data, error, status } = await supabase
-          .from('travels')
-          .select('id, TravelerName, TravelDest, TravelDays, TravelStory, Travelemail, TravelTools')
-          .eq('id', id)
-          .single();
+  const indexOfLastComment = currentPage * commentsPerPage;
+  const indexOfFirstComment = indexOfLastComment - commentsPerPage;
+  const currentComments = comments.slice(indexOfFirstComment, indexOfLastComment);
 
-        if (error) {
-          throw error;
-        }
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-        setTravels(data);
-      } catch (error) {
-        console.error('Error fetching contact:', error.message);
-      } finally {
-        setLoading(false);
+
+  const fetchTravelData = async () => {
+    try {
+      let { data, error, status } = await supabase
+        .from('travels')
+        .select('id, TravelerName, TravelDest, TravelDays, TravelStory, Travelemail, TravelTools')
+        .eq('id', id)
+        .single();
+
+      if (error) {
+        throw error;
       }
-    };
 
-    fetchData();
-  }, [id]);
+      setTravel(data);
+      setDataLoaded(true);
+      fetchAverageRating();
+      fetchComments(data.id);
+    } catch (error) {
+      console.error('Error fetching travel data:', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  useEffect(() => {
-    // ici, nous calculons la moyenne de la note de ce poste
-    const fetchAverageRating = async () => {
-      try {
+  const fetchAverageRating = async () => {
+    try {
+      if (dataLoaded && travel) {
         const { data, error, status } = await supabase
           .from('ratings')
           .select('rate')
@@ -63,29 +70,52 @@ export default function Travels({ id }) {
           const average = sum / data.length;
           setAverageRating(average);
         }
-      } catch (error) {
-        console.error('Error fetching average rating:', error.message);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching average rating:', error.message);
+    }
+  };
 
+  const fetchComments = async (postId) => {
+    try {
+      const { data, error, status } = await supabase
+        .from('ratings')
+        .select('id, emailofrater, emailofauthor, postid, comments, parentId')
+        .eq('postid', postId);
+
+      setComments(data);
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error('Error fetching comments:', error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchTravelData();
+  }, [id]);
+
+  useEffect(() => {
     if (travel) {
       fetchAverageRating();
     }
-  }, [travel]);
+  }, [travel, dataLoaded]);
 
   const handleRate = (value) => {
     setRate(value);
   };
 
-  // ici, nous envoyons la critique
   const Validate = async () => {
+    setRevOpen(false);
     try {
       const { data, error, status } = await supabase
         .from('ratings')
         .upsert(
           [
             {
-              emailofrater: user.email,
+              emailofrater: user?.email,
               postid: travel.id,
               rate: value,
               comments: commentaire,
@@ -101,80 +131,142 @@ export default function Travels({ id }) {
 
       console.log('Rating submitted successfully:', data);
       setSubmitting(true);
-      setSubmitted(true);
+      fetchAverageRating();
+      fetchComments(travel.id);
     } catch (error) {
       console.error('Error updating rating:', error.message);
     }
   };
 
+  const handleRevOpen = () => {
+    setRevOpen(true);
+    setModification(true);
+  };
+
+  const cancelRev = () => {
+    setRevOpen(false);
+    setModification(false);
+  };
+
   return (
     <Layout>
       <div>
-        <div className="flex items-center">
+      <div className={`mt-20 flex items-center ${darkMode ? 'dark-writting':'light-writting'}`}>
           <ChevronLeftIcon className="h-10 w-10" aria-hidden="true" />
           <Link href='/travels' className="ml-2">GO BACK</Link>
         </div>
         <br /><br />
-  
+
         {loading ? (
           <p>Loading...</p>
         ) : (
           travel && (
             <>
-              <table className="table-auto w-full">
+              <table className="table-auto w-full mt-32">
                 <tbody>
                   <tr>
                     <td className='w-1/3'>
-                      <div className='text-5xl font-bold'>
+                      <div className={`text-5xl ml-20 font-bold ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                         {travel.TravelDest}
                       </div>
                       <br /><br />
-                      <div className='flex items-center'>
+                      <div className={`flex items-center mb-10 ml-20  ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                         <OutlineUserCircleIcon width={30} height={30} />
                         <span className="ml-2">
                           {travel.TravelerName}
                         </span>
+                      </div>
+                      <div className={`ml-10 ml-32 mb-5  ${darkMode ? 'dark-writting' : 'light-writting'}`}>
+                        {travel.TravelDays}
                         <br /><br />
-                        <div>
-                          {travel.TravelDays}
-                          <br /><br />
-                        </div>
-                        <div>
-                          by  {travel.TravelTools}
-                        </div>
+                      </div>
+                      <div className={`ml-10 ml-32  mb-5  ${darkMode ? 'dark-writting' : 'light-writting'}`}>
+                        by  {travel.TravelTools}
                       </div>
                     </td>
-  
+
                     <td className='w-1/3 items-center'>
-                      <div className='px-10 py-10 text-justify bg-white overflow-hidden shadow rounded-lg '>
-                        {travel.TravelStory}
-                      </div>
+                      <div className='px-10 py-10 text-justify bg-white overflow-hidden shadow rounded-lg text-black'>
+                        <div dangerouslySetInnerHTML={{ __html: travel.TravelStory }} />                      </div>
                     </td>
-  
-                    <td className='grid justify-items-end'>
-                      {submitted ? (
-                        <h1> Thanks for your review</h1>
-                      ) : (
-                        <>
-                          <div className='wt-rate'>This post is rated: {averageRating.toFixed(2)}/5</div>
-                          
-                          {user ? (
+
+                    <td className='grid justify-items-end  mr-10'>
+
+                      <>
+                        <div className={`wt-rate mb-10 ${darkMode ? 'dark-writting' : 'light-writting'}`}>This post is rated: {averageRating.toFixed(2)}/5</div>
+
+                        {user ? (
+                          <>
+                            {isRevOpen ? (
+                              <>
+                                <div className='ml-auto justify-center mr-5 text-center font-bold text-black text-xl mb-10'>
+                                  <StarRating onRate={handleRate} />
+                                  <textarea name='commentaire' className='rounded-md' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
+                                  <button onClick={Validate} className="flex rounded py-1 px-3 text-white bg-slate-500 hover:bg-orange-500" disabled={submitting}>
+                                    SUBMIT YOUR REVIEW
+                                  </button>
+                                  {modification && (
+                                    <button className="flex items-center rounded-md border border-grey-300" onClick={cancelRev}>
+                                      cancel
+                                    </button>
+                                  )}
+                                </div>
+                              </>) : (
+                              <>
+                                <div className='ml-auto justify-center mr-5 text-center text-xl mb-10'>
+                                  <button className={`flex items-center rounded-md border border-grey-300 ${darkMode ? 'dark-writting' : 'light-writting'}`} onClick={handleRevOpen}>
+                                    <ChatAltIcon className="h-5 w-5" aria-hidden="true" />
+                                    Submit a review
+                                  </button>
+                                </div>
+                              </>
+                            )}
+                          </>
+
+                        ) : (
+                          <div className='flex ml-auto justify-center mr-5 text-center text-black text-xl mb-10'>
+                            <Link href='/login' className='hover:underline'>Log in</Link>
+                            <p className="ml-2">to submit a review on this post</p>
+                          </div>
+                        )}
+
+                        <div className="grid md:grid-rows ">
+                          {comments && comments.length > 0 ? (
                             <>
-                              <StarRating onRate={handleRate} />
-                              <textarea name='commentaire' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
-                              <button onClick={Validate} className={`flex ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={submitting}>
-                                SUBMIT YOUR REVIEW
-                              </button>
+                              {comments
+                                .filter((comm) => !comm.parentId) // Exclude replies from the top-level comments
+                                .map((comm) => (
+                                  <div key={comm.id} className={`bg-white overflow-hidden shadow rounded-lg p-4 mb-4 `}>
+                                    <div className="flex items-center">
+                                      <img src={getGravatarUrl(comm.emailofrater)} alt="Gravatar" className="w-12 h-12 rounded-full" />
+                                      <h3 className="ml-2 text-xl font-bold mb-2 text-black">{comm.emailofrater} commented: </h3>
+                                    </div>
+                                    <p className="ml-12 text-slate-500 mb-2">{comm.comments}</p>
+
+
+                                    {comments.map((reply) => (
+                                      reply.parentId === comm.id && (
+                                        <div key={reply.id} className="ml-8 bg-gray-100 border-l-2 pl-2">
+                                          <div className="flex items-center">
+                                            <img src={getGravatarUrl(reply.emailofrater)} alt="Gravatar" className="w-10 h-10 rounded-full" />
+                                            <h4 className="ml-2 text-lg font-semibold text-black">{reply.emailofauthor} replied: </h4>
+                                          </div>
+                                          <p className="ml-8 text-slate-600">{reply.comments}</p>
+                                        </div>
+                                      )
+                                    ))}
+                                  </div>
+                                ))}
                             </>
                           ) : (
-                            <div className='flex'>
-                              <Link href='/login'>Log in </Link> to leave a review on this post
-                            </div>
+                            <p className={`${darkMode ? 'dark-writting' : 'light-writting'}`}>No comments have been left yet</p>
                           )}
-  
-                        </>
-                      )}
+
+                        </div>
+                      </>
+
                     </td>
+
                   </tr>
                 </tbody>
               </table>

@@ -1,12 +1,17 @@
+import React from 'react';
+import Link from 'next/link';
+import { useUser } from './UserContext';
 
+export default function Footer() {
+  const { darkMode } = useUser();
 
-export default function footer(){
   return (
-    <footer className="bg-gradient-to-r from-orange-500 to-orange-200 py-8 px-0">
-    
-      <h4 className="wt-title">Powered by Ariane Aubrun and Noemie Lagrasta</h4>
-      
-  </footer>
-  )
-  
+    <footer className={`py-8 px-0 ${darkMode ? 'dark-footer' : 'light-footer'}`}>
+      <div>
+        <Link href="/about" className={`wt-title flex items-center justify-center`}>
+          Powered by Ariane Aubrun and Noemie Lagrasta
+        </Link>
+      </div>
+    </footer>
+  );
 }
