@@ -125,7 +125,7 @@ export default function Travels() {
     }
     fetchTravels();
     ;
-  }
+  };
 
 
   const openModal = () => {

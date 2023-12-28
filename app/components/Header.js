@@ -44,7 +44,7 @@ export default function Header() {
           {user && (
             <li>
               <Link href="/admin/profile" className="wt-title flex">
-                <div className='flex itemps-center'>
+                <div className='flex items-center'>
                   <OutlineUserCircleIcon width={30} height={30}/>
                   <span className="ml-2">{user.email}</span>                  
                 </div>
