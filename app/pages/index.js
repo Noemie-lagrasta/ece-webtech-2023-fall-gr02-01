@@ -16,7 +16,7 @@ export default function Page() {
         </div>
 
         <div className="text-center mb-32 font-fold text-black text-3xl font-bold">
-           Take a look at the posts made by our users about the trips they`&apos`ve taken.
+           Take a look at the posts made by our users about the trips they&apos;ve taken.
            <br/><br/>
         </div>
       </main>
