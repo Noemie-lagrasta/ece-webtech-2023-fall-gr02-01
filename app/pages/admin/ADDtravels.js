@@ -15,10 +15,12 @@ export default function Page() {
     e.preventDefault();
   
     const formData = new FormData(e.target);
- 
+    const data = {};
     const travelDays = formData.get('days') + ' ' + formData.get('measure');
   
-
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
   
     try {
       const { data: newContact, error } = await supabase
