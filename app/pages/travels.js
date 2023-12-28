@@ -20,7 +20,7 @@ export default function Travels() {
   const [travelToDelete, setTravelToDelete] = useState(null);
   const fetchTravels = async () => {
 
-
+    
     let { data, error } = await supabase
       .from('travels')
       .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, Travelemail`);
@@ -50,13 +50,13 @@ export default function Travels() {
     setDeleteModalOpen(false);
 
     console.log('a delete:', travelToDelete.id)
-
+  
     if (travelToDelete) {
       let { data, error } = await supabase
         .from('travels')
         .delete()
         .eq('id', travelToDelete.id); // Use eq() to match the 'id' field
-
+  
       if (error) {
         console.error('Error deleting travel:', error);
       }
@@ -64,11 +64,11 @@ export default function Travels() {
 
     fetchTravels();
   };
-
-
-
+  
+  
+  
   useEffect(() => {
-
+    
     fetchTravels(); // Now fetchTravels is defined before being called
   }, [searchTerm]);
 
@@ -135,33 +135,33 @@ export default function Travels() {
   const fetchFilteredTravels = async (filters) => {
     try {
       let data; // Declare 'data' variable here
-
+  
       if (filters != null) {
         const { data: filteredData, error } = await supabase
           .from('travels')
           .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, TravelCountry`)
           .in('TravelCountry', filters);
-
+  
         if (error) {
           console.error('Error fetching filtered travels:', error);
           return;
         }
-
+  
         data = filteredData; // Assign 'filteredData' to 'data'
       } else {
         let { data: allData, error } = await supabase
           .from('travels')
           .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
-
+  
         data = allData; // Assign 'allData' to 'data'
       }
-
+  
       setTravels(data || []);
     } catch (error) {
       console.error('Error handling filters change:', error);
     }
   };
-
+  
 
   const closeModal = async () => {
     setModalOpen(false);
