@@ -21,12 +21,11 @@ export default function Travels({ id }) {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    //here we recupere all the infos of the post chose
+    // ici, nous récupérons toutes les informations du poste choisi
     const fetchData = async () => {
       try {
         let { data, error, status } = await supabase
           .from('travels')
-
           .select('id, TravelerName, TravelDest, TravelDays, TravelStory, Travelemail, TravelTools')
           .eq('id', id)
           .single();
@@ -47,7 +46,7 @@ export default function Travels({ id }) {
   }, [id]);
 
   useEffect(() => {
-    //here we calculate the average of the rate of this post
+    // ici, nous calculons la moyenne de la note de ce poste
     const fetchAverageRating = async () => {
       try {
         const { data, error, status } = await supabase
@@ -74,12 +73,11 @@ export default function Travels({ id }) {
     }
   }, [travel]);
 
-
   const handleRate = (value) => {
     setRate(value);
   };
 
-  //here we send the review
+  // ici, nous envoyons la critique
   const Validate = async () => {
     try {
       const { data, error, status } = await supabase
@@ -111,107 +109,87 @@ export default function Travels({ id }) {
 
   return (
     <Layout>
-      <br /><br />
-      <div className="flex items-center">
-        <ChevronLeftIcon className="h-10 w-10" aria-hidden="true" />
-        <Link href='/travels' className="ml-2">GO BACK</Link>
-      </div>
-      <br /><br />
-      <br /><br />
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        travel && (
-
-
-          <table className="table-auto w-full">
-            <tbody>
-              <tr>
-                <td className='w-1/3'>
-                  <div className='text-5xl font-bold'>
-                    {travel.TravelDest}
-                  </div>
-                  <br /><br />
-                  <div className='flex items-center'>
-                    <OutlineUserCircleIcon width={30} height={30} />
-                    <span className="ml-2">
-                      {travel.TravelerName}
-                    </span>
-
-                  <br /><br />
-                  <div>
-                    {travel.TravelDays}
-                    <br /><br />
-                  </div>
-                  <div>
-                    by  {travel.TravelTools}
-                  </div>
-
-                  <br />
-                </td>
-                <td className='w-1/3 items-center'>
-                  <div className='px-10 py-10 text-justify bg-white overflow-hidden shadow rounded-lg ' >
-                    <div>
-                      {travel.TravelStory}
-                    </div>
-                  </div>
-                </td>
-                <td className=' grid justify-items-end'>
-                  {submitted ? (
-                    <h1> Thanks for your review</h1>
-                  ) : (
-                    <>
-
-                      <div className='wt-rate'>This post is rated: {averageRating.toFixed(2)}/5</div>
-
-                      {user ? (
-                        <>
-                          <StarRating onRate={handleRate} />
-                          <textarea name='commentaire' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
-                          <button onClick={Validate} className={`flex ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={submitting}>
-                            SUBMIT YOUR REVIEW
-                          </button>
-                        </>
-                      ) : (
-                        <div className='flex'>
-                          <Link href='/login'>Log in </Link> to leave a review on this post
-                        </div>
-                      )}
-
-                    <div className='wt-rate'>This post is rated: {averageRating.toFixed(2)}/5</div>
-
-                    {user ? (
-                      <>
-                        <StarRating onRate={handleRate} />
-                        <textarea name='commentaire' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
-                        <button onClick={Validate} className={`flex ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={submitting}>
-                          SUBMIT YOUR REVIEW
-                        </button>
-                      </>
-                    ) : (
-                      <div className='flex'>
-                        <Link href='/login'>Log in </Link> to leave a review on this post
+      <div>
+        <div className="flex items-center">
+          <ChevronLeftIcon className="h-10 w-10" aria-hidden="true" />
+          <Link href='/travels' className="ml-2">GO BACK</Link>
+        </div>
+        <br /><br />
+  
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
+          travel && (
+            <>
+              <table className="table-auto w-full">
+                <tbody>
+                  <tr>
+                    <td className='w-1/3'>
+                      <div className='text-5xl font-bold'>
+                        {travel.TravelDest}
                       </div>
-                    )}
-
-                    </>
-                  )}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        )
-      )
-      }
-    </Layout >
+                      <br /><br />
+                      <div className='flex items-center'>
+                        <OutlineUserCircleIcon width={30} height={30} />
+                        <span className="ml-2">
+                          {travel.TravelerName}
+                        </span>
+                        <br /><br />
+                        <div>
+                          {travel.TravelDays}
+                          <br /><br />
+                        </div>
+                        <div>
+                          by  {travel.TravelTools}
+                        </div>
+                      </div>
+                    </td>
+  
+                    <td className='w-1/3 items-center'>
+                      <div className='px-10 py-10 text-justify bg-white overflow-hidden shadow rounded-lg '>
+                        {travel.TravelStory}
+                      </div>
+                    </td>
+  
+                    <td className='grid justify-items-end'>
+                      {submitted ? (
+                        <h1> Thanks for your review</h1>
+                      ) : (
+                        <>
+                          <div className='wt-rate'>This post is rated: {averageRating.toFixed(2)}/5</div>
+                          
+                          {user ? (
+                            <>
+                              <StarRating onRate={handleRate} />
+                              <textarea name='commentaire' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
+                              <button onClick={Validate} className={`flex ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`} disabled={submitting}>
+                                SUBMIT YOUR REVIEW
+                              </button>
+                            </>
+                          ) : (
+                            <div className='flex'>
+                              <Link href='/login'>Log in </Link> to leave a review on this post
+                            </div>
+                          )}
+  
+                        </>
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </>
+          )
+        )}
+      </div>
+    </Layout>
   );
 }
-
 
 export async function getServerSideProps(context) {
   return {
     props: {
       id: context.params.id
     },
-  }
+  };
 }

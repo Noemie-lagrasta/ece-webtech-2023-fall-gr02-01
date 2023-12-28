@@ -1,6 +1,7 @@
-import Head from 'next/head'
-import Link from 'next/link'
+import Head from 'next/head';
+import Link from 'next/link';
 import Layout from '/components/Layout.js';
+import { CogIcon } from '@heroicons/react/solid';
 
 export default function Articles({ articles }) {
   return (
@@ -10,22 +11,23 @@ export default function Articles({ articles }) {
           Welcome to your personal Dashboard
         </div>
 
-        <br/>   <br/>   <br/>
+        <br /> <br /> <br />
 
-          <div className='wt-choice'>
-            <Link href='/admin/yourPosts'>Your posts</Link>
-          </div>
-          <br/>   <br/>   <br/>
+        <div className='wt-choice'>
+          <Link href='/admin/yourPosts'>Your posts</Link>
+        </div>
+        <br /> <br /> <br />
 
-          <div className='wt-choice '>
-            <Link href='/admin/ADDtravels'>Write a new post</Link>
-          </div>
+        <div className='wt-choice '>
+          <Link href='/admin/ADDtravels'>Write a new post</Link>
+        </div>
 
-          <br/>   <br/>   <br/>
-          <div className='wt-choice'>
-            <Link href='/'>Change your personal informations</Link>
-          </div>
+        <br /> <br /> <br />
+        <div className='wt-choice flex justify-center'>
+          <CogIcon className="h-12 w-12 mr-2" aria-hidden="true"></CogIcon>
+          <Link href='/PersonalInfo'>See your personal information</Link>
+        </div>
       </div>
     </Layout>
-  )
+  );
 }
