@@ -11,7 +11,7 @@ export default function Header() {
     <header className={`py-8 px-0 ${darkMode ? 'dark-header' : 'light-header'}`}>
       <nav className="container mx-auto flex items-center justify-between">
         <Link href="/" className={`text-2xl font-bold text-center hover:underline`}>
-          WEB`&apos`TRIPS
+          WEB&apos;TRIPS
         </Link>
         <ul className="space-x-10 flex">
           <li>

@@ -10,7 +10,8 @@ export default function Page() {
       <main >
         <div className={`mt-32 mb-32 w-full flex items-center justify-center`}>
           <div className={`px-20 py-20 text-9xl font-bold text-center ${darkMode ? 'dark-components' : 'light-components'} border rounded-md`}>
-            WEB`&apos`TRIPS <br />
+          WEB&apos;TRIPS <br />
+
           </div>
         </div>
 

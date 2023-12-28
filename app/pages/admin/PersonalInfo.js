@@ -126,7 +126,7 @@ export default function Articles({ articles }) {
                         <a href='contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
-                                Don`&apos`t hesitate to contact us if you have any problems!
+                                Don&apos;t hesitate to contact us if you have any problems!
                             </div>
 
                         </a>
@@ -173,7 +173,7 @@ export default function Articles({ articles }) {
                         <a href='contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
-                                Don`&apos`t hesitate to contact us if you have any problems!
+                                Don&apos;t hesitate to contact us if you have any problems!
                             </div>
 
                         </a>
@@ -277,7 +277,7 @@ export default function Articles({ articles }) {
                         <a href='contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
-                                Don`&apos`t hesitate to contact us if you have any problems!
+                                Don&apos;t hesitate to contact us if you have any problems!
                             </div>
 
                         </a>
