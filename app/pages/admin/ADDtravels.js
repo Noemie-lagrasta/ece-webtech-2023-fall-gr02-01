@@ -6,6 +6,7 @@ import { useUser } from '/components/UserContext.js';
 
 export default function Page() {
   const supabase = useSupabaseClient();
+  
   const [message, setMessage] = useState(null);
   const { user } = useUser();
   const [postDone, setPostDone] = useState(false);

@@ -25,6 +25,16 @@
   @apply text-amber-500 text-6xl font-bold text-center;
 }
 
+@layer components {
+  .bg-orange {
+    background-color: orange;
+  }
+  .border-orange{
+    border-color: orange;
+  }
+
+}
+
 .wt-title {
   @apply text-white text-2xl font-bold text-center;
   text-decoration: none;
@@ -34,6 +44,21 @@
   @apply text-amber-500 text-6xl font-bold text-center;
   text-decoration: none;
   transition: text-decoration 0.2s;
+}
+
+
+.wt-title-trip {
+  @apply text-black text-4xl font-bold ;
+
+}
+
+.wt-choice{
+  @apply px-5 py-5 text-5xl text-center text-white font-bold bg-orange-500 border border-orange-500 rounded-md ;
+  transition: text-decoration 0.2s;
+
+}
+.wt-choice:hover{
+  transform: scale(1.5);
 }
 
 
@@ -79,7 +104,7 @@
 }
 
 .wt-welcome{
-  @apply px-20 py-20 text-white text-9xl font-bold text-center bg-orange border border-orange rounded-md;
+  @apply px-20 py-20 text-white text-9xl font-bold text-center bg-orange-500 border border-orange-500  rounded-md;
 
 }
 .wt-center{
