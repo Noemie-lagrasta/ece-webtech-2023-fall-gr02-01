@@ -1,112 +1,28 @@
+# ECE Web Technologies Lab 2
+This is a Node.js web server that covers Node.js script, HTTP server, routing, and JSON files. 
 
-# Blogging application - ECE Webtech project
+## Installations
 
-*introduction, pre-requisites, installation, usage...*
+1. Clone the GitHub repository 
+```
+git clone https://github.com/aariane/ece-webtech-2023-fall-gr02-01.git
+```
 
-## Deliverables 
-
-- Vercel URL: *place your URL*
-- Supabase project URL: *place your URL*
+2. Install Node.js
+```
+npm install   
+```
+3. Start a web server
+```
+npm run  
+```
+4. Access the following routes :
+   - '/' to look at the guide
+   - '/about' to access the JSON about file
+   - '/hello?name=RandomName' to print Hello followed by the name you entered
+   - '/hello?name=Inchirah' to print a short introduction of myself
 
 ## Authors
-
-- Ariane AUBRUN, group 02
-- Noemie LAGRASTA, group 02
-- Inchirah JABIR, group 02
-
-## Evaluation
-
-### Mandatory Tasks
-
-* **Naming convention**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Project structure**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Git usage**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Code quality**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Design, UX, and content**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-
-* **Home page**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Navigation**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Login and profile page**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Post creation and display**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Comment creation and display**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Post modification and removal**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Search**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Use an external API**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Resource access control**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Account settings**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **WYSIWYG integration**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Gravatar integration**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-* **Light/dark mode**
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-  * Task feedback: *Facultative, how did you find the task (difficulty, pertinence...)*
-
-### Bonus Tasks
-
-* ***Task title 1***   
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-* ***Task title 2***   
-  * Grade: *How many points you think you deserve*
-  * Comments: *How did you implement the task*
-
-## Miscellaneous
-
-### Course Feedback
-
-*Your feedback about the course, what you liked, what you disliked, what you missed...*
-
-### Project Reuse
-
-- [ ] We authorize the professors to use our project as an example for the next year students (facultative).
+- Inchirah Jabir
+- Ariane Aubrun
+- Noemie Lagrasta

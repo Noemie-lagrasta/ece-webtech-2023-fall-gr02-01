@@ -19,8 +19,6 @@ export default function Travels() {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [travelToDelete, setTravelToDelete] = useState(null);
   const fetchTravels = async () => {
-
-    
     let { data, error } = await supabase
       .from('travels')
       .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, Travelemail`);
@@ -134,34 +132,29 @@ export default function Travels() {
 
   const fetchFilteredTravels = async (filters) => {
     try {
-      let data; // Declare 'data' variable here
-  
+
       if (filters != null) {
-        const { data: filteredData, error } = await supabase
+        const { data, error } = await supabase
           .from('travels')
           .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools, TravelCountry`)
           .in('TravelCountry', filters);
-  
+
         if (error) {
           console.error('Error fetching filtered travels:', error);
           return;
         }
-  
-        data = filteredData; // Assign 'filteredData' to 'data'
-      } else {
-        let { data: allData, error } = await supabase
+      }
+      else {
+        let { data, error } = await supabase
           .from('travels')
           .select(`id, TravelerName, TravelDest, TravelDays, TravelStory, TravelTools`);
-  
-        data = allData; // Assign 'allData' to 'data'
+
       }
-  
       setTravels(data || []);
     } catch (error) {
       console.error('Error handling filters change:', error);
     }
   };
-  
 
   const closeModal = async () => {
     setModalOpen(false);
