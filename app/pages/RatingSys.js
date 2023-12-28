@@ -1,31 +1,42 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import Layout from '/components/Layout.js';
+import React, { useState } from 'react';
 
-export default function Articles({ articles }) {
+const StarRating = ({ onRate }) => {
+  const [hoveredRating, setHoveredRating] = useState(0);
+  const [selectedRating, setSelectedRating] = useState(0);
+
+  const handleStarHover = (starValue) => {
+    setHoveredRating(starValue);
+  };
+
+  const handleStarClick = (starValue) => {
+    setSelectedRating(starValue);
+    if (onRate) {
+      onRate(starValue);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredRating(0);
+  };
+
   return (
-    <Layout>
-      <div className='items-center'>
-        <div className='text-6xl font-bold text-center'>
-          Welcome to your personal Dashboard
-        </div>
+    <div>
+      {[1, 2, 3, 4, 5].map((starValue) => (
+        <span className='wt-star'
+          key={starValue}
+          onClick={() => handleStarClick(starValue)}
+          onMouseEnter={() => handleStarHover(starValue)}
+          onMouseLeave={handleMouseLeave}
+          style={{
+            cursor: 'pointer',
+            color: starValue <= (hoveredRating || selectedRating) ? 'gold' : 'gray',
+          }}
+        >
+          ★
+        </span>
+      ))}
+    </div>
+  );
+};
 
-        <br/>   <br/>   <br/>
-
-          <div className='wt-choice'>
-            <Link href='/admin/yourPosts'>Your posts</Link>
-          </div>
-          <br/>   <br/>   <br/>
-
-          <div className='wt-choice '>
-            <Link href='/admin/ADDtravels'>Write a new post</Link>
-          </div>
-
-          <br/>   <br/>   <br/>
-          <div className='wt-choice'>
-            <Link href='/'>Change your personal informations</Link>
-          </div>
-      </div>
-    </Layout>
-  )
-}
+export default StarRating;
