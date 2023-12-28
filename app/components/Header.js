@@ -20,7 +20,7 @@ export default function Header() {
   };
  
   return (
-    <header className="bg-gradient-to-r from-orange-200 to-orange-700 py-8 px-0">
+    <header className="bg-gradient-to-r from-orange-200 to-orange-500 py-8 px-0">
       <nav className="container mx-auto flex items-center justify-between">
         <Link href="/" className="wt-title">
           WEB'TRIPS
