@@ -8,13 +8,15 @@ import dynamic from 'next/dynamic';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
-
+//this page is only available for authentificated users
+//it's a dedicated page for a contact form to the support team
 export default function Page() {
   const supabase = useSupabaseClient();
   const [message, setMessage] = useState('');
   const { user, darkMode } = useUser();
   const [contactDone, setContactDone] = useState(false);
 
+  //to get the message value
   const handleMessageChange = (value) => {
     setMessage(value);
   };
@@ -23,6 +25,7 @@ export default function Page() {
     setContactDone(false);
   }, []);
 
+  //to insert the contcat form in the contacts database
   const onSubmit = async function (e) {
     e.preventDefault();
 

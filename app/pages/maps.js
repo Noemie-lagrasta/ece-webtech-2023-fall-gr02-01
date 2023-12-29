@@ -9,15 +9,17 @@ import Modal from 'react-modal';
 import Router, { useRouter } from 'next/router';
 import { useUser } from '@/components/UserContext';
 
-// Import MapContainer dynamically to ensure it works with SSR
+// Import MapContainer dynamically 
 const MapContainer = dynamic(() => import('react-leaflet').then((mod) => mod.MapContainer), {
   ssr: false,
 });
 
-// Other Leaflet components
+// import  Leaflet components
 const TileLayer = dynamic(() => import('react-leaflet').then((mod) => mod.TileLayer), { ssr: false });
 const GeoJSON = dynamic(() => import('react-leaflet').then((mod) => mod.GeoJSON), { ssr: false });
 
+//this page is  available for all
+//it's a dedicated page for users who want to see the posts by searching on the maps
 const MapComponent = () => {
   const [position, setPosition] = useState(null);
   const [countryInfo, setCountryInfo] = useState(null);
@@ -30,10 +32,9 @@ const MapComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [travelToDelete, setTravelToDelete] = useState(null);
-  const router = useRouter();
 
   useEffect(() => {
-    // Define handleCountryInfo in the global scope only on the client side
+    // define handleCountryInfo in the global scope only on the client side
     if (typeof window !== 'undefined') {
       window.handleCountryInfo = (data) => {
         console.log('Country Info Response:', data);
@@ -44,6 +45,7 @@ const MapComponent = () => {
     }
   }, []);
 
+  //to get the country info by asking the external API by providing the lat and long
   const getCountryInfo = (lat, lon) => {
     if (typeof window !== 'undefined') {
       const script = document.createElement('script');
@@ -54,7 +56,6 @@ const MapComponent = () => {
 
   const handleMoveend = (event) => {
     const center = event.target.getCenter();
-    console.log('Map Moveend:', center.lat, center.lng);
     setPosition([center.lat, center.lng]);
   };
 

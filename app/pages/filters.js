@@ -1,6 +1,9 @@
 import React from 'react';
 import { useUser } from '@/components/UserContext';
 
+//this page is available for all webtrips users 
+// this is a modal open when the user want to filter the travles displays.
+// the filter is based on the different countries presents in the database
 const FilterModal = ({ onClose, filtersCount, handleFilterClick }) => {
   const { darkMode } = useUser();
 

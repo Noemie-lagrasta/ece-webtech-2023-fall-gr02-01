@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+//function call to rate the posts by rating with stars
 const StarRating = ({ onRate }) => {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);

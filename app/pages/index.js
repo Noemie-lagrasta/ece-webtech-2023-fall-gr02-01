@@ -2,6 +2,8 @@ import React from 'react';
 import { useUser } from '../components/UserContext';
 import Layout from '../components/Layout';
 
+//this page is  available for all
+//it's a dedicated home page
 export default function Page() {
   const { darkMode } = useUser();
 

@@ -8,7 +8,7 @@ import { useUser, getGravatarUrl } from '/components/UserContext.js';
 import StarRating from '/pages/RatingSys';
 
 //this page is only available for tauthentificate users
-//it's a dedicated page which display all the information on his post: his posts, the rates, the comments and the possibility to reply
+//it's a dedicated page which display all the information on the selecte dposts: rates, content, comments
 export default function Travels({ id }) {
   const [travel, setTravel] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -31,7 +31,7 @@ export default function Travels({ id }) {
   const currentComments = comments.slice(indexOfFirstComment, indexOfLastComment);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // to get 
+  // to get the content of the seected post
   const fetchTravelData = async () => {
     try {
       let { data, error, status } = await supabase
@@ -46,6 +46,7 @@ export default function Travels({ id }) {
 
       setTravel(data);
       setDataLoaded(true);
+      // to get the rate
       fetchAverageRating();
       fetchComments(data.id);
     } catch (error) {
@@ -55,6 +56,7 @@ export default function Travels({ id }) {
     }
   };
 
+  //to get all the rates of the selected article
   const fetchAverageRating = async () => {
     try {
       if (dataLoaded && travel) {
@@ -67,6 +69,7 @@ export default function Travels({ id }) {
           throw error;
         }
 
+        //calcul of the average
         if (data && data.length > 0) {
           const sum = data.reduce((acc, rating) => acc + rating.rate, 0);
           const average = sum / data.length;
@@ -78,6 +81,7 @@ export default function Travels({ id }) {
     }
   };
 
+  //calcul to get all the comments on this articles: comments or replies
   const fetchComments = async (postId) => {
     try {
       const { data, error, status } = await supabase
@@ -105,10 +109,12 @@ export default function Travels({ id }) {
     }
   }, [travel, dataLoaded]);
 
+  //when the user submit a rate
   const handleRate = (value) => {
     setRate(value);
   };
 
+  //when the user submit a review, so me insert the globality in the ratings database
   const Validate = async () => {
     setRevOpen(false);
     try {
@@ -131,15 +137,17 @@ export default function Travels({ id }) {
         throw error;
       }
 
-      console.log('Rating submitted successfully:', data);
       setSubmitting(true);
+      //we calcul again the average after this new review
       fetchAverageRating();
+      //we fetch again the comments to get all the new submitted comments
       fetchComments(travel.id);
     } catch (error) {
       console.error('Error updating rating:', error.message);
     }
   };
 
+  //if the user want to submit a review
   const handleRevOpen = () => {
     setRevOpen(true);
     setModification(true);

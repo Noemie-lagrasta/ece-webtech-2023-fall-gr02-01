@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Layout from '../components/Layout.js'
 import { useUser } from '../components/UserContext.js'
 
+//this page is alvailable for everybody
+//it's a dedicated page for rhe webtrip's team
 export default function Page() {
   const { darkMode } = useUser();
   return (

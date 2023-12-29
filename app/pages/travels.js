@@ -25,7 +25,7 @@ export default function TravelsPage() {
   const suffixToCheck = "@webtrips.fr";
 
   useEffect(() => {
-    // Check if the user is an admin when the component mounts
+    // Check if the user is an admin
     if (user) {
       setIsAdmin(user.email.endsWith(suffixToCheck));
     }
