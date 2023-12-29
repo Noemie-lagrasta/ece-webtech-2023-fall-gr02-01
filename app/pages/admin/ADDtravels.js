@@ -3,14 +3,15 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Layout from '../../components/Layout.js';
 import { useUser } from '/components/UserContext.js';
 import axios from 'axios';
-import 'react-quill/dist/quill.snow.css'; // Import the styles
+import 'react-quill/dist/quill.snow.css';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-
+import sanitizeHtml from 'sanitize-html';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
-
+//this page is only available for the user himself
+//it's a dedicated page from his persnal dashboard: for adding a new post on the application (so on the database too)
 export default function Page() {
   const supabase = useSupabaseClient();
   const [message, setMessage] = useState(null);
@@ -19,16 +20,20 @@ export default function Page() {
   const [countries, setCountries] = useState([]);
   const [travelStory, setTravelStory] = useState('');
 
+    //to get the value of the message using WISYWIG library
   const handleTravelStoryChange = (value) => {
     setTravelStory(value);
   };
 
+    //to insert in database the user new post
   const onSubmit = async function (e) {
     e.preventDefault();
     const formElement = document.getElementById('nvpost');
     const formData = new FormData(formElement);
 
     const travelDays = formData.get('days') + ' ' + formData.get('measure');
+        //use to allow the html css in the story
+    const sanitizedMessage = sanitizeHtml(travelStory, { allowedTags: [], allowedAttributes: {} });
 
     try {
       const { data: newContact, error } = await supabase
@@ -39,7 +44,7 @@ export default function Page() {
             TravelDest: formData.get('TravelDest'),
             TravelCountry: formData.get('TravelCountry'),
             TravelDays: travelDays,
-            TravelStory: travelStory, // Use the state value for the TravelStory
+            TravelStory: sanitizedMessage, 
             TravelTools: formData.get('TravelTools'),
             Travelemail: user.email,
           },
@@ -48,14 +53,13 @@ export default function Page() {
         throw error;
       }
 
-      // Log or handle success for the upsert
-      console.log('Upsert successful:', newContact);
       setPostDone(true);
     } catch (error) {
       console.error('Error in the upsert:', error);
     }
   };
 
+  //to get all the countries names from the external API geonames
   useEffect(() => {
     const fetchData = async () => {
       try {

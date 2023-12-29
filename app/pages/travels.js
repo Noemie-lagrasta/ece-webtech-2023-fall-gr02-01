@@ -224,7 +224,7 @@ export default function TravelsPage() {
                     </Link>
                   </div>
                 )}
-                {(user.email === travel.Travelemail || isAdmin) && (
+                {user && (user.email === travel.Travelemail || isAdmin) && (
                 <div>
                   <button
                     onClick={() => handleDeleteClick(travel)}

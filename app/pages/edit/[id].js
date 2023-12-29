@@ -7,7 +7,8 @@ import Link from 'next/link.js';
 import axios from 'axios';
 import { useUser } from '@/components/UserContext.js'
 
-
+//this page is only available for the user himself
+//it's a dedicated page to modify the post, he had already published
 export default function Travels({ id }) {
   const [travel, setTravels] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,8 +20,9 @@ export default function Travels({ id }) {
   const [isStoryOpen, setStoryOpen] = useState(false);
   const [modifcation, setModif] = useState(false);
   const [countries, setCountries] = useState([]);
-  const { user, darkMode } = useUser();
+  const { darkMode } = useUser();
 
+  //to get all the information from the travel post [selected] to update
   const fetchData = async () => {
     try {
       let { data, error, status } = await supabase
@@ -42,7 +44,7 @@ export default function Travels({ id }) {
   };
 
 
-
+//when the user, submit un update
   const onSubmit = async function (e) {
     e.preventDefault();
     setDestOpen(false);
@@ -53,12 +55,13 @@ export default function Travels({ id }) {
 
     const formData = new FormData(e.target);
 
-
+// because the user select the duration by using 2 select input we have to contract them
     const days = formData.get('days');
     const measure = formData.get('measure');
     const travelDays = days && measure ? days + ' ' + measure : travel.TravelDays;
 
 
+    //object to get the update fields
     const fields = {};
     formData.forEach((value, key) => {
       if (value.trim() !== '' && key !== 'days' && key !== 'measure') {
@@ -66,6 +69,7 @@ export default function Travels({ id }) {
       }
     });
 
+    //to update the database with the update fields
     try {
       const { data: newContact, error } = await supabase
         .from('travels')

@@ -1,23 +1,16 @@
-// Importez les composants nécessaires
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { ChevronRightIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
-import { FilterIcon } from '@heroicons/react/solid';
+import { ChevronRightIcon} from '@heroicons/react/solid';
 import Layout from '/components/Layout.js';
 import { supabase } from '@/utils/supabase';
-import FilterModal from '@/pages/filters';
 import { useUser } from '/components/UserContext.js';
-import Modal from 'react-modal';
 
+//this page is only available for webtrips administrator
+//it's a dedicated page which display all the contact forms
 export default function TravelsPage() {
   const [contacts, setContacts] = useState([]);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [filtersCount, setFilterCountry] = useState([]);
-  const [selectedFilters, setSelectedFilters] = useState({ filtersCount: [] });
-  const { user, darkMode, gravatar } = useUser();
-  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [travelToDelete, setTravelToDelete] = useState(null);
+  const { darkMode  } = useUser();
+  //to make a pagination, only 6/page
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(6);
 
@@ -27,26 +20,21 @@ export default function TravelsPage() {
       .from('contacts')
       .select(`id, firstname, lastname, email, message, reply`);
 
-
       if (error) {
         console.log('Error: ', error);
       }
-
       setContacts(data || []);
     };
   
-
 
   useEffect(()=> {
     fetchContacts();
   });
 
-
-
+  //to make a pagination, only 6/page
   const indexOfLastArticle = currentPage * articlesPerPage;
   const indexOfFirstArticle = indexOfLastArticle - articlesPerPage;
   const currentArticles = contacts.slice(indexOfFirstArticle, indexOfLastArticle);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (

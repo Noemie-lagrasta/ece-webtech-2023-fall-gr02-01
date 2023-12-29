@@ -6,11 +6,15 @@ import Link from 'next/link';
 import { useUser } from '/components/UserContext.js';
 import Modal from 'react-modal';
 
+//this page is only available for the user himself
+//it's a dedicated page for his persnal dashboard: see his posts with the reviews
 export default function Travels() {
     const [travels, setTravels] = useState([]);
     const [loading, setLoading] = useState(true);
     const supabase = useSupabaseClient();
     const { user, darkMode } = useUser();
+
+    //to make a pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [articlesPerPage] = useState(2);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -21,11 +25,14 @@ export default function Travels() {
     const currentArticles = travels.slice(indexOfFirstArticle, indexOfLastArticle);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    //if the user want to delete one of his post
     const handleDeleteClick = (travel) => {
         setTravelToDelete(travel);
         setDeleteModalOpen(true);
       };
     
+      //the confirmation and action to delete the chooser article
       const handleDeleteConfirm = async () => {
         setDeleteModalOpen(false);
     
@@ -47,6 +54,7 @@ export default function Travels() {
     
 
 
+      //to get all the posts written by user.eamil
     const fetchData = async () => {
         try {
             if (user && user.email) {
@@ -72,6 +80,7 @@ export default function Travels() {
         }
     };
 
+    //fetch, to get the updates
     useEffect(() => {
         fetchData();
     }, [user]);

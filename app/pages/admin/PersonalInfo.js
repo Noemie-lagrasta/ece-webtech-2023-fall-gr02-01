@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import Head from 'next/head';
 import Layout from '/components/Layout.js';
 import { supabase } from '@/utils/supabase';
 import { useUser } from '/components/UserContext.js';
 import { ChatAlt2Icon } from '@heroicons/react/solid';
 import { PencilIcon } from '@heroicons/react/outline';
 
+//this page is only available for the user himself
+//it's a dedicated page from his persnal dashboard: he can  update its' personal information
 export default function Articles({ articles }) {
     const [newPassword, setNewPassword] = useState('');
     const [activeSection, setActiveSection] = useState('dashboard');
@@ -16,6 +17,7 @@ export default function Articles({ articles }) {
     const [modifcation, setmodif] = useState(false);
     const [isPassOpen, setPassOpen] = useState(false);
 
+    //update the password by using the supabase function
     const handlePasswordUpdate = async () => {
         try {
             const { user, error } = await supabase.auth.updateUser({ password: newPassword });
@@ -30,6 +32,7 @@ export default function Articles({ articles }) {
         }
     };
 
+    //to insert the update in the database users
     const onSubmit = async function (e) {
         e.preventDefault();
         setAddOpen(false);
@@ -38,10 +41,9 @@ export default function Articles({ articles }) {
 
         const formData = new FormData(e.target);
 
-        // Créer un objet pour stocker uniquement les champs renseignés
+        //object to get only the update fields, because they don't need to bee all updated
         const updatedFields = {};
 
-        // Vérifier chaque champ et l'ajouter à l'objet s'il est renseigné
         formData.forEach((value, key) => {
             if (value.trim() !== '') {
                 updatedFields[key] = value;
@@ -66,52 +68,56 @@ export default function Articles({ articles }) {
                 throw error;
             }
 
-            // Log ou traiter le succès de l'upsert
-            console.log('Upsert successful:', newContact);
         } catch (error) {
             console.error('Error in the upsert:', error);
         }
     };
 
 
+    //if the user want to add or update a nickname
     const handleModifNICKClick = () => {
         setNickOpen(true);
         setmodif(true);
     };
-
+    //if the user want to add or update a phone number
     const handleModifPHOClick = () => {
         setPhoneOpen(true);
         setmodif(true);
 
     };
+    //if the user want to add or update a personal address
     const handleModifADDClick = () => {
         setAddOpen(true);
         setmodif(true);
 
     };
+    //if the user want to update his password
     const handleModifPassClick = () => {
         setPassOpen(true);
     };
 
+    //if the user want to cancel the wish to add or update a nickname
     const cancelNick = () => {
         setNickOpen(false);
     };
-
+    //if the user want to cancel the wish to add or update a phone number
     const cancelPho = () => {
         setPhoneOpen(false);
     };
+    //if the user want to cancel the wish to add or update a personal address
     const cancelAdd = () => {
         setAddOpen(false);
     };
+    //if the user want to cancel the wish to aupdate the password
     const cancelPass = () => {
         setPassOpen(false);
     };
 
 
-
-
+    //inside of this page there is a menu: dashboard, update passwoard, add or update personal informaitons
     const renderSection = () => {
         switch (activeSection) {
+            //here the home page, possibility to contact the support
             case 'dashboard':
                 return (
                     <div>
@@ -124,7 +130,8 @@ export default function Articles({ articles }) {
                                 <p></p>
                             )}
                         </div>
-                        <a href='contacts'>
+                        
+                        <a href='/contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
                                 Don&apos;t hesitate to contact us if you have any problems!
@@ -133,7 +140,7 @@ export default function Articles({ articles }) {
                         </a>
                     </div>
                 );
-
+            //here the passwoard update page, possibility to contact the support
             case 'password':
                 return (
                     <div className='items-center'>
@@ -172,7 +179,7 @@ export default function Articles({ articles }) {
                             )}
 
                         </div>
-                        <a href='contacts'>
+                        <a href='/contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
                                 Don&apos;t hesitate to contact us if you have any problems!
@@ -181,10 +188,8 @@ export default function Articles({ articles }) {
                         </a>
                     </div>
                 );
-
+            //here the personal infos page, possibility to contact the support
             case 'info':
-
-
                 return (
                     <div className='justify-center my-10 '>
                         <div className='justify-center my-10 text-center font-bold text-black text-3xl'>
@@ -276,7 +281,7 @@ export default function Articles({ articles }) {
                         </div>
 
 
-                        <a href='contacts'>
+                        <a href='/contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
                                 Don&apos;t hesitate to contact us if you have any problems!

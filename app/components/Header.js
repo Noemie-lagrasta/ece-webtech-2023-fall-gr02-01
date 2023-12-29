@@ -4,7 +4,9 @@ import { useUser } from './UserContext';
 import OutlineUserCircleIcon from '@heroicons/react/outline/UserCircleIcon';
 import { MoonIcon, SunIcon } from '@heroicons/react/solid';
 
+//This function is usefull in the layout for the head of the page (navigation bar)
 export default function Header() {
+  //load the darkmode state, usern 
   const { user, Hlogout, darkMode, toggleDarkMode } = useUser();
 
   return (

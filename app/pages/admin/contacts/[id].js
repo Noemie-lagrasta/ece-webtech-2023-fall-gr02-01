@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Layout from '../../../components/Layout.js';
-import OutlineUserCircleIcon from '@heroicons/react/outline/UserCircleIcon';
 import { ChevronLeftIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import 'react-quill/dist/quill.snow.css';
@@ -11,6 +10,8 @@ import { useUser } from '../../../components/UserContext.js';
 
 const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
+//this page is only available for webtrips administrator
+//it's a dedicated page for each contact from received
 export default function Travels({ id }) {
   const [contact, setContact] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,21 +21,26 @@ export default function Travels({ id }) {
   const [message, setMessage] = useState('');
   const [replyDone, setReplyDone] = useState(false);
 
+  //when the administrator want to replu to the contact form
   const handlereply = () => {
     setIsOpen(true);
-    console.log("Want to reply");
   }
 
+  //to get the value of the message using WISYWIG library
   const handleMessageChange = (value) => {
     setMessage(value);
   };
 
+  //when he send the reply, to save it in the database
   const onSubmit = async function (e) {
-    e.preventDefault();
+    e.preventDefault()
+    //close the reply space
     setIsOpen(false);
+    //not display the reply button, if the answer is already reply
     setReplyDone(true);
 
     const formData = new FormData(e.target);
+    //use to allow the html css in the message
     const sanitizedMessage = sanitizeHtml(message, { allowedTags: [], allowedAttributes: {} });
 
     if (user) {
@@ -47,6 +53,7 @@ export default function Travels({ id }) {
               lastname: null,
               email: user.email,
               message: sanitizedMessage,
+              //only when it is a reply from an administrator
               reply: true,
             },
           ],
@@ -57,15 +64,13 @@ export default function Travels({ id }) {
           throw error;
         }
 
-        console.log('Success', newContact);
-        // Assuming setContactDone is defined somewhere
-        // setContactDone(true);
       } catch (error) {
-        console.error('Error submitting contact information:', error.message);
+        console.error('Error submitting contact reply:', error.message);
       }
     }
   };
 
+  //this function to get the information of the contact [selected] on the previous page
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,7 +85,6 @@ export default function Travels({ id }) {
         }
 
         setContact(data);
-        console.log("data:", data);
       } catch (error) {
         console.error('Error fetching post:', error.message);
       } finally {

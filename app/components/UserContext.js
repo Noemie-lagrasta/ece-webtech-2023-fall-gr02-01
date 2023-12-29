@@ -4,11 +4,13 @@ import { MD5 } from 'crypto-js';
 
 const UserContext = createContext();
 
+//to get the gravatar by using the user.email
 export const getGravatarUrl = (email) => {
   const gravatarUrl = `https://www.gravatar.com/avatar/${MD5(email.toLowerCase())}?s=150&d=identicon`;
   return gravatarUrl;
 };
 
+//construc the user strucuture
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState({
     session: null,
@@ -18,19 +20,20 @@ export const UserProvider = ({ children }) => {
 
   });
 
+  //this function allow us to load the darkmoste state save in the database
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
-        // Récupérer l'utilisateur depuis la table users
         supabase
           .from('users')
-          .select('darkMode')  // Remplacez 'darkMode' par le nom de la colonne correspondante dans votre table
+          .select('darkMode')  
           .eq('id', session.user.id)
           .then(({ data, error }) => {
             if (error) {
               console.error('Erreur lors de la récupération du mode sombre :', error.message);
             } else {
-              const darkMode = data?.[0]?.darkMode ?? false;  // Utiliser la valeur de la base de données ou false par défaut
+              //if there is not data in the database, the default value is false
+              const darkMode = data?.[0]?.darkMode ?? false; 
               const gravatar = session.user.email ? `https://www.gravatar.com/avatar/${MD5(session.user.email.toLowerCase())}?s=150&d=identicon` : null;
               setUser({
                 session,
@@ -46,6 +49,7 @@ export const UserProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
+  //this function insert or update the user in the database if he modify the darkmode 
   useEffect(() => {
     if (user.session) {
       supabase
@@ -67,6 +71,7 @@ export const UserProvider = ({ children }) => {
     }
   }, [user.darkMode, user.session]);
 
+  //this function is to log out from the application
   const Hlogout = async () => {
     await supabase.auth.signOut();
     setUser({
@@ -77,6 +82,7 @@ export const UserProvider = ({ children }) => {
     });
   };
 
+  //this function is to toggle the mode 
   const toggleDarkMode = () => {
     setUser((prevUser) => ({
       ...prevUser,

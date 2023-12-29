@@ -6,6 +6,8 @@ import { ChevronLeftIcon, ChatAlt2Icon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import { useUser, getGravatarUrl } from '/components/UserContext.js';
 
+//this page is only available for the user himself
+//it's a dedicated page which display all the information on his post: his posts, the rates, the comments and the possibility to reply
 export default function Travels({ id }) {
   const [travel, setTravel] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -18,12 +20,13 @@ export default function Travels({ id }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [commentsPerPage] = useState(2);
 
+  //to make a pagination, only 6/page
   const indexOfLastComment = currentPage * commentsPerPage;
   const indexOfFirstComment = indexOfLastComment - commentsPerPage;
   const currentComments = commentaires.slice(indexOfFirstComment, indexOfLastComment);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  //to save when the user replied a comment: to make nested comments
   const handleModifReply = (commentId) => {
     setReplyStates((prevStates) => ({
       ...prevStates,
@@ -34,12 +37,14 @@ export default function Travels({ id }) {
     }));
   };
 
+  //to insert in database the reply of the comment
   const handleReplySubmit = async (e, parentId) => {
     e.preventDefault();
     setReplyStates((prevStates) => ({
       ...prevStates,
       [parentId]: { hasReplied: true, isOpen: false },
     }));
+    
 
     try {
       await supabase
@@ -50,10 +55,12 @@ export default function Travels({ id }) {
             emailofauthor: travel.Travelemail,
             postid: id,
             comments: replyText,
+            //to know which comments its replies to
             parentId: parentId,
           },
         ]);
 
+        //after the insert, we get again the comments from the databse to see the new ones
       const { data: updatedComments, error } = await supabase
         .from('ratings')
         .select('id, emailofrater, emailofauthor, postid, comments, parentId')
@@ -70,6 +77,7 @@ export default function Travels({ id }) {
     }
   };
 
+  //function to fetch all the informations of the user post
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -94,6 +102,7 @@ export default function Travels({ id }) {
     fetchData();
   }, [id]);
 
+  //function to fetch all the rates of the user post to make an average
   useEffect(() => {
     const fetchAverageRating = async () => {
       try {
@@ -106,6 +115,7 @@ export default function Travels({ id }) {
           throw error;
         }
 
+        //calcul of the average
         if (data && data.length > 0) {
           const sum = data.reduce((acc, rating) => acc + rating.rate, 0);
           const average = sum / data.length;
@@ -121,6 +131,7 @@ export default function Travels({ id }) {
     }
   }, [travel]);
 
+  //function to fetch all the comments of the user post
   useEffect(() => {
     const fetchComments = async () => {
       try {

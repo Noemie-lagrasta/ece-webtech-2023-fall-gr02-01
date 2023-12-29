@@ -5,13 +5,15 @@ import { CogIcon } from '@heroicons/react/solid';
 import { useUser } from '../../components/UserContext.js';
 import { useEffect, useState } from 'react';
 
+//this page is only available for the user himself
+//it's a dedicated page for his persnal dashboard: he can update its' personal information, write a new post, see his posts with his reviews
 export default function Articles({ articles }) {
   const { user, darkMode } = useUser();
   const [isAdmin, setIsAdmin] = useState(false);
   const suffixToCheck = "@webtrips.fr";
 
   useEffect(() => {
-    // Check if the user is an admin when the component mounts
+    // Check if the user is an admin
     if (user) {
       setIsAdmin(user.email.endsWith(suffixToCheck));
     }

@@ -41,7 +41,7 @@ We run the application by using "npm run build"
   * Comments: we look at other websites on the web to take inspiration
 * **Navigation**
   * Grade: 2
-  * Comments: We have a navigation bar where the user can find: Posts (to see all the posts available in our database), Maps (the user can navigate on the map to see where there are posts availables), About us (small introduction of us the authors), Contact us ( a page with a formular to contact us), User.email (to access its personal dashboard), the sign in/ sign out button, the dark/light mode button
+ * Comments: We have a navigation bar where the user can find: Posts (to see all the posts available in our database), Maps (the user can navigate on the map to see where there are posts availables), About us (small introduction of us the authors), Contact us ( a page with a formular to contact us), User.email (to access its personal dashboard), the sign in/ sign out button, the dark/light mode button
   * Task feedback: the method is the same for each layers so, once we get it it was very simple
 * **Login and profile page**
   * Grade:4
