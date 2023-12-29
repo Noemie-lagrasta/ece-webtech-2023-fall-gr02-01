@@ -6,7 +6,6 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import { ChevronRightIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/solid';
 import Modal from 'react-modal';
-import Router, { useRouter } from 'next/router';
 import { useUser } from '@/components/UserContext';
 
 // Import MapContainer dynamically 
@@ -32,6 +31,15 @@ const MapComponent = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   const [travelToDelete, setTravelToDelete] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const suffixToCheck = "@webtrips.fr";
+
+  useEffect(() => {
+    // Check if the user is an admin
+    if (user) {
+      setIsAdmin(user.email.endsWith(suffixToCheck));
+    }
+  }, [user]);
 
   useEffect(() => {
     // define handleCountryInfo in the global scope only on the client side
@@ -176,8 +184,6 @@ const MapComponent = () => {
                   onEachFeature={onEachFeature}
                 />
               )}
-
-
             </MapContainer>
           )}
         </div>
@@ -189,8 +195,7 @@ const MapComponent = () => {
               </div>
               {currentArticles.length > 0 ? (
                 currentArticles.map((travel) => (
-                  <div key={travel.id} className="w-110 bg-white overflow-hidden shadow rounded-lg"
-                  >
+                  <div key={travel.id} className="w-110 bg-white overflow-hidden shadow rounded-lg">
                     <div className="p-4">
                       <h3 className="text-3xl text-black font-bold mb-2 ">{travel.TravelDest}</h3>
                       <p className="text-slate-500 mb-2">{travel.TravelerName}</p>
@@ -201,22 +206,26 @@ const MapComponent = () => {
                     <div className="p-4 flex justify-between items-center">
                       <Link
                         href={`/travels/${travel.id}`}
-                        className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}
-                        >
+                        className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'}`}
+                      >
                         <ChevronRightIcon className="h-5 w-5 " aria-hidden="true" />
                       </Link>
                       {user && user.email === travel.Travelemail && (
                         <div className="flex items-center">
                           <Link
                             href={`/admin/posts/${travel.id}`}
-                            className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}
-                            >
+                            className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'}`}
+                          >
                             <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
                           </Link>
+                        </div>
+                      )}
+                      {user && (user.email === travel.Travelemail || isAdmin) && (
+                        <div>
                           <button
                             onClick={() => handleDeleteClick(travel)}
-                            className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}
-                            >
+                            className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'}`}
+                          >
                             <TrashIcon className="h-5 w-5" aria-hidden="true" />
                           </button>
                           <Modal
@@ -245,14 +254,18 @@ const MapComponent = () => {
                           </Modal>
                         </div>
                       )}
+
                     </div>
                   </div>
-                ))
+                )
+
+                )
+
               ) : (
                 <div className={`text-2xl text-center ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                   <br />
                   There are no articles written yet about a destination in this country. <br /><br />
-                  Have you been there ? <br /><br /><br />
+                  Have you been there? <br /><br /><br />
                   {user ? (
                     <>
                       <Link href="/admin/ADDtravels" className={`text-2xl font-bold  rounded-md px-4 py-4 hover:underline  ${darkMode ? 'dark-components' : 'light-components'}`}>Add an article</Link>
@@ -271,15 +284,14 @@ const MapComponent = () => {
                       key={index}
                       onClick={() => paginate(index + 1)}
                       className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1
-                          ? darkMode
-                            ? 'bg-blue-500 text-white'
-                            : 'bg-orange-500 text-white'
-                          : 'bg-gray-300 text-gray-700'
+                        ? darkMode
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-orange-500 text-white'
+                        : 'bg-gray-300 text-gray-700'
                         }`}
                     >
                       {index + 1}
                     </button>
-
                   ))}
                 </div>
               )}
@@ -287,7 +299,7 @@ const MapComponent = () => {
           )}
         </div>
       </div>
-    </Layout>
+    </Layout >
   );
 };
 
