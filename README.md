@@ -101,11 +101,10 @@ The delete button open a modal to confirme the act of deletion.
 * ***Admin dashboard**
   * Grade: 3
   * Comments: on this dashworad, only available for those with an email finishing by '@webtrips.com', on this dashboard the admin can manage all the posts (possibility to delete them) and then he has an access to alle the contact message received and can answer to them, the answer is saved in the database.
+  * If you want to try: we created an administrator account {email: noemie@webtrips.fr, password: adminwebtrips}.
 * ***Add nested comments**
   * Grade: 2
   * Comments:on each post, author can see the reviews and reply to them, it is display in nested way because we create in the databse the attribute 'parentID': if it's a reply we had the postID to which it responds, else it is a null values.
-  If you want to try: we created an administrator account {email: noemie@webtrips.fr, password: adminwebtrips}.
-## Miscellaneous
 
 ### Course Feedback
 
