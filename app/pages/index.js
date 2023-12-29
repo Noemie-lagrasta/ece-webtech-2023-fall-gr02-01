@@ -17,7 +17,7 @@ export default function Page() {
           </div>
         </div>
 
-        <div className="text-center mb-32 font-fold text-black text-3xl font-bold">
+        <div className={`text-center mb-32 font-fold text-3xl font-bold ${darkMode ? 'dark-writting' : 'light-writting'}  rounded-md`}>
            Take a look at the posts made by our users about the trips they&apos;ve taken.
            <br/><br/>
         </div>

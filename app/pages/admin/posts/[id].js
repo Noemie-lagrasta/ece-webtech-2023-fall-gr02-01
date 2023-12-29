@@ -55,6 +55,7 @@ export default function Travels({ id }) {
             emailofauthor: travel.Travelemail,
             postid: id,
             comments: replyText,
+            rate: averageRating,
             //to know which comments its replies to
             parentId: parentId,
           },

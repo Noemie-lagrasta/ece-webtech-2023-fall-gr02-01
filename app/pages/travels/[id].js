@@ -212,7 +212,7 @@ export default function Travels({ id }) {
                                 <div className='ml-auto justify-center mr-5 text-center font-bold text-black text-xl mb-10'>
                                   <StarRating onRate={handleRate} />
                                   <textarea name='commentaire' className='rounded-md' placeholder='Your comment here' value={commentaire} onChange={(e) => setCommentaire(e.target.value)}></textarea>
-                                  <button onClick={Validate} className="flex rounded py-1 px-3 text-white bg-slate-500 hover:bg-orange-500" disabled={submitting}>
+                                  <button onClick={Validate} className={`flex rounded py-1 px-3 text-white bg-slate-500 hover:bg-${darkMode ? 'blue':'orange'}-500`} disabled={submitting}>
                                     SUBMIT YOUR REVIEW
                                   </button>
                                   {modification && (

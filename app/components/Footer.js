@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className={`py-8 px-0 ${darkMode ? 'dark-footer' : 'light-footer'}`}>
       <div>
-        <Link href="/about" className={`wt-title flex items-center justify-center`}>
+        <Link href="/about" className={`wt-title flex items-center justify-center ${darkMode ? 'text-black' : 'light-writting'} `}>
           Powered by Ariane Aubrun and Noemie Lagrasta
         </Link>
       </div>
