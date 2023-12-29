@@ -233,7 +233,7 @@ export default function Travels({ id }) {
                         <div className="grid md:grid-rows ">
                           {comments && comments.length > 0 ? (
                             <>
-                              {comments
+                              {currentComments
                                 .filter((comm) => !comm.parentId) // Exclude replies from the top-level comments
                                 .map((comm) => (
                                   <div key={comm.id} className={`bg-white overflow-hidden shadow rounded-lg p-4 mb-4 `}>
@@ -261,6 +261,25 @@ export default function Travels({ id }) {
                           ) : (
                             <p className={`${darkMode ? 'dark-writting' : 'light-writting'}`}>No comments have been left yet</p>
                           )}
+                          {comments.length > commentsPerPage && (
+                          <div className="flex justify-center mt-4">
+                            {Array.from({ length: Math.ceil(comments.length / commentsPerPage) }, (_, index) => (
+                              <button
+                                key={index}
+                                onClick={() => paginate(index + 1)}
+                                className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1
+                                  ? darkMode
+                                    ? 'bg-blue-500 text-white'
+                                    : 'bg-orange-500 text-white'
+                                  : 'bg-gray-300 text-gray-700'
+                                  }`}
+                              >
+                                {index + 1}
+                              </button>
+
+                            ))}
+                          </div>
+                        )}
 
                         </div>
                       </>

@@ -21,6 +21,16 @@ export default function TravelsPage() {
   const [travelToDelete, setTravelToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(6);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const suffixToCheck = "@webtrips.fr";
+
+  useEffect(() => {
+    // Check if the user is an admin when the component mounts
+    if (user) {
+      setIsAdmin(user.email.endsWith(suffixToCheck));
+    }
+  }, [user]); 
+
 
   const router = useRouter();
 
@@ -155,63 +165,67 @@ export default function TravelsPage() {
   return (
     <Layout >
       <div className='mb-4'>
-      <div className="mb-4 mt-12">
-        <input
-          type="text"
-          placeholder="a city, a web'tripper, way to travel ..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md w-full"
-        />
-      </div>
+        <div className="mb-4 mt-12">
+          <input
+            type="text"
+            placeholder="a city, a web'tripper, way to travel ..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 border border-gray-300 rounded-md w-full"
+          />
+        </div>
 
-      <div className={`flex space-x-4 ${darkMode ? 'dark-writting' : 'light-writting'}`}>
-        <button className="flex items-center rounded-md border border-grey-300 " onClick={openModal}>
-          <FilterIcon className="h-5 w-5" aria-hidden="true" />
-          FILTER POSTS
-        </button>
-        {selectedFilters.filtersCount.length > 0 && (
-          <button className="flex items-center rounded-md border border-grey-300" onClick={clearFilters}>
-            CLEAR FILTER
+        <div className={`flex space-x-4 ${darkMode ? 'dark-writting' : 'light-writting'}`}>
+          <button className="flex items-center rounded-md border border-grey-300 " onClick={openModal}>
+            <FilterIcon className="h-5 w-5" aria-hidden="true" />
+            FILTER POSTS
           </button>
+          {selectedFilters.filtersCount.length > 0 && (
+            <button className="flex items-center rounded-md border border-grey-300" onClick={clearFilters}>
+              CLEAR FILTER
+            </button>
+          )}
+        </div>
+        <br /><br />
+        {isModalOpen && (
+          <FilterModal
+            onClose={closeModal}
+            filtersCount={filtersCount}
+            handleFilterClick={handleFilterClick}
+          />
         )}
-      </div>
-      <br /><br />
-      {isModalOpen && (
-        <FilterModal
-          onClose={closeModal}
-          filtersCount={filtersCount}
-          handleFilterClick={handleFilterClick}
-        />
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {currentArticles.map((travel) => (
-          <div
-            key={travel.id}
-            className={`bg-white overflow-hidden shadow rounded-lg`}
-          >
-            <div className="p-4">
-              <h3 className="text-4xl font-bold mb-2 text-black">{travel.TravelDest}</h3>
-              <p className="text-slate-500 mb-2">{travel.TravelerName}</p>
-              <p className="text-slate-500">{travel.TravelDays} </p>
-              <p className='text-slate-500'>by {travel.TravelTools}</p>
-              <p className="text-slate-500 mt-2" dangerouslySetInnerHTML={{ __html: travel.TravelStory.slice(0, 100) + ' ....' }} />
-            </div>
-            <div className="p-4 flex justify-between items-center">
-              <Link
-                href={user && user.email === travel.Travelemail ? `/admin/posts/${travel.id}` : `/travels/${travel.id}`}
-                passHref
-                className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}>
-                <ChevronRightIcon className="h-5 w-5 " aria-hidden="true" />
-              </Link>
-              {user && user.email === travel.Travelemail && (
-                <div className="flex items-center">
-                  <Link
-                    href={`/edit/${travel.id}`}
-                    passHref
-                    className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}>
-                    <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
-                  </Link>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {currentArticles.map((travel) => (
+            <div
+              key={travel.id}
+              className={`bg-white overflow-hidden shadow rounded-lg`}
+            >
+              <div className="p-4">
+                <h3 className="text-4xl font-bold mb-2 text-black">{travel.TravelDest}</h3>
+                <p className="text-slate-500 mb-2">{travel.TravelerName}</p>
+                <p className="text-slate-500">{travel.TravelDays} </p>
+                <p className='text-slate-500'>by {travel.TravelTools}</p>
+                <p className="text-slate-500 mt-2" dangerouslySetInnerHTML={{ __html: travel.TravelStory.slice(0, 100) + ' ....' }} />
+              </div>
+              <div className="p-4 flex justify-between items-center">
+                <Link
+                  href={user && user.email === travel.Travelemail ? `/admin/posts/${travel.id}` : `/travels/${travel.id}`}
+                  passHref
+                  className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}>
+                  <ChevronRightIcon className="h-5 w-5 " aria-hidden="true" />
+                </Link>
+                {user && user.email === travel.Travelemail && (
+                  <div className="flex items-center">
+                    <Link
+                      href={`/edit/${travel.id}`}
+                      passHref
+                      className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}>
+                      <PencilAltIcon className="h-5 w-5" aria-hidden="true" />
+                    </Link>
+                  </div>
+                )}
+                {(user.email === travel.Travelemail || isAdmin) && (
+                <div>
                   <button
                     onClick={() => handleDeleteClick(travel)}
                     className={`w-5 h-5 rounded-full block ${darkMode ? 'text-black bg-slate-200 hover:bg-blue-500' : 'text-black bg-slate-200 hover:bg-orange-500'} `}
@@ -244,24 +258,24 @@ export default function TravelsPage() {
                   </Modal>
                 </div>
               )}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-      {travels.length > articlesPerPage && (
-        <div className="flex justify-center mt-4">
-          {Array.from({ length: Math.ceil(travels.length / articlesPerPage) }, (_, index) => (
-            <button
-              key={index}
-              onClick={() => paginate(index + 1)}
-              className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? `bg-${darkMode ? 'blue' : 'orange'}-500 text-white` : 'bg-gray-300 text-gray-700'}`}
-            
-            >
-              {index + 1}
-            </button>
           ))}
         </div>
-      )}
+        {travels.length > articlesPerPage && (
+          <div className="flex justify-center mt-4">
+            {Array.from({ length: Math.ceil(travels.length / articlesPerPage) }, (_, index) => (
+              <button
+                key={index}
+                onClick={() => paginate(index + 1)}
+                className={`mx-2 px-3 py-1 rounded ${currentPage === index + 1 ? `bg-${darkMode ? 'blue' : 'orange'}-500 text-white` : 'bg-gray-300 text-gray-700'}`}
+
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </Layout>
   );

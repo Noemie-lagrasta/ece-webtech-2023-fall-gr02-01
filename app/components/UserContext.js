@@ -14,7 +14,8 @@ export const UserProvider = ({ children }) => {
     session: null,
     user: null,
     gravatar: null,
-    darkMode: false,
+    darkMode: null,
+
   });
 
   useEffect(() => {

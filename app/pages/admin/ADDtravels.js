@@ -81,8 +81,8 @@ export default function Page() {
       {postDone ? (
         <div className={`text-center mt-32 font-bold text-4xl text-orange-500 ${darkMode ? 'dark-writting' : 'light-writting'}`}>
           <span>Thanks for your new post, <br /><br />
-            Click <a href='../../travels' className='hover:underline'> here</a> to see all posts from our users<br /><br />
-            Click <Link href='/maps'><a className='hover:underline'> here</a></Link> to see the map.
+            Click <Link href='../../travels' className='hover:underline'> here</Link> to see all posts from our users<br /><br />
+            Click <Link href='/maps' className='hover:underline'> here</Link> to see the map.
           </span>
         </div>
       ) : (

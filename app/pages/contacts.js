@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import Layout from '../../components/Layout.js';
+import Layout from '../components/Layout.js';
 import { useUser } from '@/components/UserContext.js';
 import sanitizeHtml from 'sanitize-html';
 import 'react-quill/dist/quill.snow.css';
@@ -27,28 +27,37 @@ export default function Page() {
     e.preventDefault();
 
     const formData = new FormData(e.target);
+    const sanitizedMessage = sanitizeHtml(message, { allowedTags: [], allowedAttributes: {} });
 
+
+    if(user)
+    {
     try {
-      const sanitizedMessage = sanitizeHtml(message, { allowedTags: [], allowedAttributes: {} });
 
-      const { data: newContact, error } = await supabase
+           const { data: newContact, error } = await supabase
         .from('contacts')
-        .upsert([
+        .insert([
           {
             firstname: formData.get('firstname'),
             lastname: formData.get('lastname'),
             email: user.email,
             message: sanitizedMessage,
+            reply: false,
           },
-        ]);
-
-      if (error) {
-        throw error;
-      }
-      setContactDone(true);
+        ],
+        { returning: 'minimal' } // Ensure the onConflict column is specified
+        );
+        if (error) {
+          throw error;
+        }
+    
+        console.log('Success', newContact); 
+        setContactDone(true);
     } catch (error) {
       console.error('Error submitting contact information:', error.message);
     }
+  }
+  
   };
 
   return (
@@ -59,10 +68,10 @@ export default function Page() {
 
    
       {contactDone ? (
-        <div className={`text-center mt-20 font-bold text-4xl text-orange-500 ${darkMode ? 'light-writting' : 'dark-writting'}`}>
+        <div className={`text-center mt-20 font-bold text-4xl text-orange-500 ${darkMode ? 'dark-writting' : 'light-writting'}`}>
           Thank you for contacting us, our teams will get back to you within 2 weeks.<br />
           Best regards, <br />
-          the WEB`&apos`TRIPS team <br />
+          the WEB&apos;TRIPS team <br />
         </div>
       ) : (
     
@@ -107,7 +116,7 @@ export default function Page() {
         </div>
       )}  </> ):(
         <>
-        <div className={`text-center mt-20 font-bold text-4xl text-orange-500 ${darkMode ? 'light-writting' : 'dark-writting'}`}>
+        <div className={`text-center mt-20 font-bold text-4xl text-orange-500 ${darkMode ? 'dark-writting' : 'light-writting'}`}>
           please connect you to leave us a message</div>
         </>
 

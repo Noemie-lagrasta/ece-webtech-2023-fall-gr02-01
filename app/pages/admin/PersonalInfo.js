@@ -54,11 +54,12 @@ export default function Articles({ articles }) {
                 .upsert(
                     [
                         {
+                            id: user.id,
                             email: user.email,
                             ...updatedFields,
                         },
                     ],
-                    { onConflict: ['email'] }
+                    { onConflict: ['id'] }
                 );
 
             if (error) {
@@ -153,6 +154,7 @@ export default function Articles({ articles }) {
                                                     type='password'
                                                     value={newPassword}
                                                     onChange={(e) => setNewPassword(e.target.value)}
+                                                    className='text-black'
                                                 />
                                             </label>
                                         </div>
@@ -199,7 +201,7 @@ export default function Articles({ articles }) {
                                         <div className={`${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                                 <label>
                                                     <span>What is your nickname ?</span>
-                                                    <input type="text" name="nickname" className='rounded-md' placeholder='i.e: Jack STELLO' />
+                                                    <input type="text" name="nickname" className='rounded-md text-black' placeholder='i.e: Jack STELLO' />
                                                 </label>
                                             </div>
                                             <div>
@@ -228,7 +230,7 @@ export default function Articles({ articles }) {
                                         <div className={`${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                                 <label>
                                                     <span>What is your phone number?</span>
-                                                    <input type="text" name="phone" className='rounded-md' placeholder='i.e:0678976543' />
+                                                    <input type="text" name="phone" className='rounded-md text-black' placeholder='i.e:0678976543' />
                                                 </label>
                                             </div>
                                             <div>
@@ -256,7 +258,7 @@ export default function Articles({ articles }) {
                                         <div className={`${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                                 <label>
                                                     <span>What is your phone number?</span>
-                                                    <input type="text" name="address" className='rounded-md' placeholder='i.e: 36 quai de grenelle' />
+                                                    <input type="text" name="address" className='rounded-md text-black' placeholder='i.e: 36 quai de grenelle' />
                                                 </label>
                                             </div>
                                             <div>
