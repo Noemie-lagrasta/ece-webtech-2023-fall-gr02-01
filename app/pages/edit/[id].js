@@ -95,6 +95,7 @@ export default function Travels({ id }) {
     }
   };
 
+  //to get all the countries names if he want to modify the destination, he'll have to precise again the country
   useEffect(() => {
     const fetchCountry = async () => {
       try {
@@ -119,26 +120,32 @@ export default function Travels({ id }) {
     fetchData();
   }, [id]);
 
+  //if the user want to modify the destination
   const handleModifDest = () => {
     setDestOpen(true);
     setModif(true);
   };
+  //if the user want to modify his name
   const handleModifName = () => {
     setNameOpen(true);
     setModif(true);
   };
+  //if the user want to modify the duration
   const handleModifTime = () => {
     setTimeOpen(true);
     setModif(true);
   };
+  // if the user want to modify his way od transport
   const handleModifTool = () => {
     setToolOpen(true);
     setModif(true);
   };
+  // if the user want to modify the content of his post
   const handleModifStory = () => {
     setStoryOpen(true);
     setModif(true);
   };
+//if he want to concel any modification he wanted to do
   const cancelDest = () => {
     setDestOpen(false);
     setModif(false);

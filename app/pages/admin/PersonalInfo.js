@@ -4,6 +4,7 @@ import { supabase } from '@/utils/supabase';
 import { useUser } from '/components/UserContext.js';
 import { ChatAlt2Icon } from '@heroicons/react/solid';
 import { PencilIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 
 //this page is only available for the user himself
 //it's a dedicated page from his persnal dashboard: he can  update its' personal information
@@ -131,13 +132,13 @@ export default function Articles({ articles }) {
                             )}
                         </div>
                         
-                        <a href='/contacts'>
+                        <Link href='/contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
                                 Don&apos;t hesitate to contact us if you have any problems!
                             </div>
 
-                        </a>
+                        </Link>
                     </div>
                 );
             //here the passwoard update page, possibility to contact the support
@@ -179,13 +180,13 @@ export default function Articles({ articles }) {
                             )}
 
                         </div>
-                        <a href='/contacts'>
+                        <Link href='/contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
                                 Don&apos;t hesitate to contact us if you have any problems!
                             </div>
 
-                        </a>
+                        </Link>
                     </div>
                 );
             //here the personal infos page, possibility to contact the support
@@ -281,13 +282,13 @@ export default function Articles({ articles }) {
                         </div>
 
 
-                        <a href='/contacts'>
+                        <Link href='/contacts'>
                             <div className={`flex justify-center text-xl text-center hover:underline ${darkMode ? 'dark-writting' : 'light-writting'}`}>
                                 <ChatAlt2Icon className="h-5 w-5 mr-5" ></ChatAlt2Icon>
                                 Don&apos;t hesitate to contact us if you have any problems!
                             </div>
 
-                        </a>
+                        </Link>
                     </div>
                 );
 

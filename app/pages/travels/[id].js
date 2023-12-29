@@ -7,6 +7,8 @@ import Link from 'next/link.js';
 import { useUser, getGravatarUrl } from '/components/UserContext.js';
 import StarRating from '/pages/RatingSys';
 
+//this page is only available for tauthentificate users
+//it's a dedicated page which display all the information on his post: his posts, the rates, the comments and the possibility to reply
 export default function Travels({ id }) {
   const [travel, setTravel] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,16 +22,16 @@ export default function Travels({ id }) {
   const [modification, setModification] = useState(false);
   const [comments, setComments] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  //to make a pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [commentsPerPage] = useState(2);
-
   const indexOfLastComment = currentPage * commentsPerPage;
   const indexOfFirstComment = indexOfLastComment - commentsPerPage;
   const currentComments = comments.slice(indexOfFirstComment, indexOfLastComment);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-
+  // to get 
   const fetchTravelData = async () => {
     try {
       let { data, error, status } = await supabase
